@@ -4,12 +4,19 @@ User Guide for Nutrient Explorer R Shiny App
 
 Opening the Application:
      1. Download and unzip the Zip File containing the app and associated files.
+     
      2. Open RStudio > Click on “Project” (blue box, upper right) > Select “Open Project.”
+     
      3. Navigate to the file folder where you saved the Application.
+     
      4. Click on the “Nutrient_Explorer.Rproj” file and select Open.
+     
      5. On bottom right panel of RStudio, under the Files Tab, click on “ui.R” to open this R code file.
+     
      6. On bottom right panel of RStudio, under the Files Tab, click on “server.R” to open this R code file.
+     
      7. Check to make sure you have all the necessary packages installed before the next step.
+     
      8. Near the Upper Right, click on the “Run App” button with the green arrow pointing to the right.  This will open the User Interface for the application in a separate window.
 
 Step-by-Step Instructions for Using this Application:
