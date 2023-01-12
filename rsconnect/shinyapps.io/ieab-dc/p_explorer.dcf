@@ -1,0 +1,12 @@
+name: p_explorer
+title:
+username:
+account: ieab-dc
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3630346
+bundleId: 4231396
+url: https://ieab-dc.shinyapps.io/p_explorer/
+when: 1613504893.29336
+asMultiple: FALSE
+asStatic: FALSE
