@@ -3,6 +3,7 @@
 User Guide for Nutrient Explorer R Shiny App
 
 Opening the Application:
+
      1. Download and unzip the Zip File containing the app and associated files.
      
      2. Open RStudio > Click on “Project” (blue box, upper right) > Select “Open Project.”
@@ -20,12 +21,16 @@ Opening the Application:
      8. Near the Upper Right, click on the “Run App” button with the green arrow pointing to the right.  This will open the User Interface for the application in a separate window.
 
 Step-by-Step Instructions for Using this Application:
+
      1. “Load Data” Tab:
+     
        a. In the “Load Data” tab, for “Dataset Options” select either LAGOS test or LAGOS. 
        b. Click “Load this dataset”
        c. Try changing the different “Endpoint options” and “Color palette” options. 
        d. Click on the “Summary Table” button on the bottom. Try changing the “Variable group” option.
+       
      2. “Explore Data” Tab:
+     
        a. Check out the different sub-tabs: “Summary Info,” “Time Series,” etc.
        b. “Summary Info” tab: Select from the different “Endpoint options”
        c. “Time Series” tab: 
@@ -38,13 +43,19 @@ Step-by-Step Instructions for Using this Application:
          ii. “Multivariate” tab: select an endpoint variable and up to 5 predictor variables, then click “Display plots.”
        g. “Maps” tab: select an “endpoint option” from the top
        h. “Misc” tab: select between the different “endpoint options” at the top
+       
      3. “Create a Subset” tab: 
+     
        a. Adjust the different dataset ranges variables such as the Year, Month, IWS (watershed area, ha), Elevation, lake area, lake depth, Total Nitrogen, Total Phosphorus, etc.
        b. Subset the data by selecting specific Program Names, Program Types or HUC2 zones.
        c. Click “Save my subset.”
+       
      4. “Explore Subset” Tab:
+     
        a. Follow the same steps as step 2 above. 
+       
      5. “Run Models” Tab: 
+     
        a. Select the “Random Forest” model option first and click “Choose this Model”
          i. Select the endpoint for the model run (LogTP was used for this paper). 
          ii. Mouse over the different Model parameter options such as “ntree” to learn about each. 
@@ -58,6 +69,7 @@ Step-by-Step Instructions for Using this Application:
             7. Select a variable option from the drop down and click “Display partial dependence plot”
             8. Click “Show prediction map with new dataset” at the bottom.  Try adjusting the prediction month and year.  
             9. Click “Save prediction map.”
+            
        b. Select the “Linear regression” model option and click “Choose this Model”
          i. Select the endpoint for the model run (LogTP was used for this paper). 
          ii. Select predictor variables for the model (center section of the app).
@@ -79,6 +91,7 @@ Step-by-Step Instructions for Using this Application:
             2. Click “Save prediction map” – save the file and open to see how it looks. 
 
 Instructions for formatting new dataset:
+
      1. Download example data file from the Load Data Tab  
      2. Make sure that your dataset has at least one of the response variables with the exact same naming format: “TN”, “TP”, “LogTN” or “LogTP”
      3. Make sure the predictor variables and other explanatory variables like latitude and longitude, HUC2, HUC8 are present.  
