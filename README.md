@@ -5,6 +5,7 @@ User Guide for Nutrient Explorer R Shiny App
 Purpose: An analytical framework (downloadable R Shiny application) to visualize and investigate drivers of surface water quality.
 
 Features
+
      - This application provides the user with the ability to analyze lake total nitrogen or total phosphorus data for Northeastern U.S. lakes based on LAGOS NE data (https://lagoslakes.org/lagos-ne/).
      - Alternatively, the user can upload their own dataset after properly formatting the data. 
      - The user can summarize and visualize temporal and spatial patterns using a variety of approaches.
