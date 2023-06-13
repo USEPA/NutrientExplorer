@@ -78,8 +78,23 @@ Step-by-Step Instructions for Using this Application:
             5. Scroll down to see the initial results and figures that appear for the model
             6. Click on the “See additional plots and maps” button on the bottom right
             7. Select a variable option from the drop down and click “Display partial dependence plot”
-            8. Click “Show prediction map with new dataset” at the bottom.  Try adjusting the prediction month and year.  
-            9. Click “Save prediction map.”
+            8. If using default dataset: 
+		     a. Click “Show prediction map for whole region (if using deafult dataset only!!!).” 
+		     b. Try adjusting the prediction map color legend with the slider. 
+		     c. Click "Download prediction results to csv (Default Dataset)"
+		     d. Click “Save prediction map (Default Dataset)”
+		     e. Change the "Endpoint concentration criterial value"
+		     f. Click "Show prediction map in bicolor (Default Dataset)"
+		     g. Click "Save prediction map in bicolor (Default Dataset)"
+	       9. If using New Dataset:
+		     a. Click "Browse..." button under "Load new dataset (if have new variables button)"
+		     b. Click “Show prediction map for whole region (if using new dataset only!!!).”
+		     c. Try adjusting the prediction map color legend with the slider.  
+		     d. Click "Download prediction results to csv (New Dataset)"
+		     e. Click “Save prediction map (New Dataset)”
+		     f. Change the "Endpoint concentration criterial value"
+		     g. Click "Show prediction map in bicolor (New User Dataset)"
+		     h. Click "Save prediction map in bicolor (New User Dataset)"
             
        b. Select the “Linear regression” model option and click “Choose this Model”
          i. Select the endpoint for the model run (LogTP was used for this paper). 
@@ -98,11 +113,64 @@ Step-by-Step Instructions for Using this Application:
             1. Scroll back up and select “Finalize Regression Model”
             2. Scroll down and look at the table and check if any VIF values are flagged.  If so, remove that variable and reselect “Finalize Regression Model”
          vi. Step 4 Make Model Predictions 
-            1. Select this option and then click “Show prediction map”
-            2. Click “Save prediction map” – save the file and open to see how it looks. 
+            1. If using default dataset: 
+		     a. Click “Show LR prediction map for whole region (if using deafult dataset only!!!)” 
+		     b. Try adjusting the prediction map color legend with the slider
+		     c. Click "Download LR prediction results to csv (Default Dataset)"
+		     d. Click “Save LR prediction map (Default Dataset)”
+		     e. Change the "Endpoint concentration criterial value"
+		     f. Click "Show prediction map in bicolor (Default Dataset)"
+		     g. Click "Save prediction map in bicolor (Default Dataset)"
+	       2. If using New Dataset:
+		     a. Click "Browse..." button under "Load new dataset (if have new variables button)"
+		     b. Click “Show LR prediction map for whole region (if using new dataset only!!!).”
+		     c. Try adjusting the prediction map color legend with the slider.   
+		     d. Click "Download LR prediction results to csv (New Dataset)"
+		     e. Click “Save prediction map (New Dataset)”
+		     f. Change the "Endpoint concentration criterial value"
+		     g. Click "Show prediction map in bicolor (New Data)"
+		     h. Click "Save prediction map in bicolor (New Data)"
+       
+Instructions for formatting new dataset (for data exploration and training models):
+     1. Download example data file from the Load Data Tab to see how the datasets need to be formated in general.
 
-Instructions for formatting new dataset:
+     2. The new dataset needs to have the exact same header/column names for the first 24 columns: 
+	Name, LAGOS_Lake_ID, HU8ZoneID, HU8, programname, programtype, Lat, Long, HU2, Year, Month, 
+	Day, Date, Elevation, MaxDepth, MeanDepth, lake_area_ha, iws_ha, iws_slope_mean, 
+	TN, LogTN, TP, LogTP.
+	     a. Note that for column names like "LAGOS_Lake_ID," you can just use your own site IDs, but the header 
+	has to be called "LAGOS_Lake_ID."  The same rule applies to these other required header names. For 	example, for "iws_ha" you can put in watershed area of site area. 
+	     b. The HU8 column is necessary for making predictions, but the data you provide could be at a different 	scale (e.g., HUC12 or other watershed level), but the column name will have to remain as "HU8." 	Alternatively, in the this new training dataset, the HU8 column can have just 99999 for all values 
+	and the model section can still work as long as the dataset used for predictions (described below) 
+	has true watershed IDs.
+	     c. Both the Year and Month columns are needed in order for the one of the Time Series plots. 
+	     d. The first 7 columns can be given 99999 as the values and the app will still work, 
+	though certain freatues will not work. 
+	     e. IWS variables can replaced by watershed area, etc. variables. 
 
-     1. Download example data file from the Load Data Tab  
-     2. Make sure that your dataset has at least one of the response variables with the exact same naming format: “TN”, “TP”, “LogTN” or “LogTP”
-     3. Make sure the predictor variables and other explanatory variables like latitude and longitude, HUC2, HUC8 are present.  
+     3. If you are missing one of these required variables, it is best to replace with 99999 and not NA, 
+	as the NA will cause the removal of all rows during a step to remove all NAs.   Again, you cannot 
+	delete these columns and column names from your dataset.  They must be present for the application 
+	to work.   
+
+     4. For the user provided predictor/explanatory variables, such as land use, weather, deposition, make 
+	sure these variables have certain key words in them (so that the application can recognize them):
+	     a. For NLCD land use: "nlcd" or "NLCD" or "landuse" or "LANDUSE"
+	     b. For Nitrogen input variables: "N_" or "n_" or "TN_" or "tn_"
+	     c. For Phosphorus input variables: "P_" or "p_" or "TP_" or "tp_"
+	     d. For Aerosol related variables: "Aerosol" or "aerosol" or "AOD"
+	     e. For Weather variables: "Tmax" or "Tmin" or "Tmean" or "Precip" or "LST" or "FIRE" or "SNOW"
+	     f. For deposition: "Atmo" or "Ndep" or "Pdep" or "Sdep" or "Dep_"
+	     g. For vegetation variables: "Vegetation" or "NPP" or "canopy" or "Canopy"
+	     h. For Surface water, Watershed, & Misc.: "slope", "Slope", "iws", "IWS",
+	"shed","lake_area_ha","stream_length","depth","Depth","stream_order","stream_width","Elevation",
+	"Month" (of sampling),"Year" (of sampling).
+
+Instructions for formatting new prediction dataset 
+	(for modeling section, when applying trained model to make predictions for a specific region):
+     1. The above formating rules apply here as well.
+     2. Make sure this dataset has the same predictor variables (with same column names) 
+	as those in the trained model.
+     2. The HU8 column is necessary for making predictions, but the data you provide could be at a different 	scale (e.g., HUC12 or other watershed level), but the column name will have to remain as "HU8."
+  
+For questions or comments contact: Michael Pennino at pennino.michael@epa.gov
