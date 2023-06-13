@@ -7,7 +7,7 @@ Purpose: An analytical framework (downloadable R Shiny application) to visualize
 Features
 
      - This application provides the user with the ability to analyze lake total nitrogen or total phosphorus data for Northeastern U.S. lakes based on LAGOS NE data (https://lagoslakes.org/lagos-ne/).
-     - Alternatively, the user can upload their own dataset after properly formatting the data. 
+     - Alternatively, the user can upload and analyze their own surface water (lake, stream, river) dataset after properly formatting the data (see below). 
      - The user can summarize and visualize temporal and spatial patterns using a variety of approaches.
      - Subsets of the dataset can be created for further analysis using various characteristics of the variables, such as date, location, etc. 
      - Finally, the user can apply either random forest modeling or multiple linear regression to assess which predictor variables best model the spatial patterns in the water quality dataset and the models can be used to predict water quality concentrations for watersheds or locations lacking data. 
@@ -35,10 +35,10 @@ Step-by-Step Instructions for Using this Application:
 
      1. “Load Data” Tab:
      
-       a. In the “Load Data” tab, for “Dataset Options” select either LAGOS test or LAGOS. 
-       b. Click “Load this dataset”
+       a. In the “Load Data” tab, for “Dataset Options” select either LAGOS test or LAGOS or "Upload new dataset" by clicking the browse button.   
+       b. Click “Load this dataset” (if uploading new dataset, wait until it says "Upload complete" before 	clicking this button
        c. Try changing the different “Endpoint options” and “Color palette” options. 
-       d. Click on the “Summary Table” button on the bottom. Try changing the “Variable group” option.
+       d. Click on the “Summary Table” button on the bottom. Try changing the “Variable group” option - you will 	need to click the "Summary table" button again to update the table with a new variable group option.  
        
      2. “Explore Data” Tab:
      
