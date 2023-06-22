@@ -1,4 +1,4 @@
-# This is the user-interface definition of Total Phosphorus (TP) Dashboard Shiny web application. 
+# This is the user-interface definition of Nutrient Explorer Downloadable R Shiny application. 
 # You can run the application by clicking 'Run App' above.
 #
 # Find out more about building applications with Shiny here:
