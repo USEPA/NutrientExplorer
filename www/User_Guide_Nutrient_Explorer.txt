@@ -61,20 +61,24 @@ Step-by-Step Instructions for Using this Application:
             7. Select a variable option from the drop down and click “Display partial dependence plot”
             8. If using default dataset: 
 		a. Click “Show prediction map for whole region (if using deafult dataset only!!!).” 
+		(It takes a few seconds for the map to display - may need to scroll down to see it.) 
 		b. Try adjusting the prediction map color legend with the slider. 
 		c. Click "Download prediction results to csv (Default Dataset)"
 		d. Click “Save prediction map (Default Dataset)”
 		e. Change the "Endpoint concentration criterial value"
 		f. Click "Show prediction map in bicolor (Default Dataset)"
+		(It takes a few seconds for the map to display - may need to scroll down to see it.) 
 		g. Click "Save prediction map in bicolor (Default Dataset)"
 	    9. If using New Dataset:
 		a. Click "Browse..." button under "Load new dataset (if have new variables button)"
 		b. Click “Show prediction map for whole region (if using new dataset only!!!).”
+		(It takes a few seconds for the map to display - may need to scroll down to see it.) 
 		c. Try adjusting the prediction map color legend with the slider.  
 		d. Click "Download prediction results to csv (New Dataset)"
 		e. Click “Save prediction map (New Dataset)”
 		f. Change the "Endpoint concentration criterial value"
 		g. Click "Show prediction map in bicolor (New User Dataset)"
+		(It takes a few seconds for the map to display - may need to scroll down to see it.) 
 		h. Click "Save prediction map in bicolor (New User Dataset)"
        
 	b. Select the “Linear regression” model option and click “Choose this Model”
@@ -101,20 +105,24 @@ Step-by-Step Instructions for Using this Application:
          vi. Step 4 Make Model Predictions: 
             1. If using default dataset: 
 		a. Click “Show LR prediction map for whole region (if using deafult dataset only!!!)” 
+		(It takes a few seconds for the map to display - may need to scroll down to see it.) 
 		b. Try adjusting the prediction map color legend with the slider
 		c. Click "Download LR prediction results to csv (Default Dataset)"
 		d. Click “Save LR prediction map (Default Dataset)”
 		e. Change the "Endpoint concentration criterial value"
 		f. Click "Show prediction map in bicolor (Default Dataset)"
+		(It takes a few seconds for the map to display - may need to scroll down to see it.) 
 		g. Click "Save prediction map in bicolor (Default Dataset)"
 	    2. If using New Dataset:
 		a. Click "Browse..." button under "Load new dataset (if have new variables button)"
 		b. Click “Show LR prediction map for whole region (if using new dataset only!!!).”
+		(It takes a few seconds for the map to display - may need to scroll down to see it.) 
 		c. Try adjusting the prediction map color legend with the slider.   
 		d. Click "Download LR prediction results to csv (New Dataset)"
 		e. Click “Save prediction map (New Dataset)”
 		f. Change the "Endpoint concentration criterial value"
 		g. Click "Show prediction map in bicolor (New Data)"
+		(It takes a few seconds for the map to display - may need to scroll down to see it.) 
 		h. Click "Save prediction map in bicolor (New Data)"
 
 Instructions for formatting new dataset (for data exploration and training models):
