@@ -1,4 +1,4 @@
-# This is the server logic of Nutrient Explorer Dashboard Shiny Downloadable graphical user interface application. 
+# This is the server logic of Nutrient Explorer Shiny Downloadable graphical user interface application. 
 # You can run the application by clicking 'Run App' above.
 #
 # Find out more about building applications with Shiny here:
