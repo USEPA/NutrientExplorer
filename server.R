@@ -5,6 +5,8 @@
 # 
 # http://shiny.rstudio.com/
 #
+# Last Updated: 2024-04-02
+#
 rm(list=ls())
 
 library("shiny")
@@ -30,12 +32,13 @@ library("padr")
 library("scales")
 library("DT")
 library("geoR")
-library("rgdal")
 library("sf")
-library("rgeos")
-library("maptools")
+#library("rgeos")
+#library("rgdal")
+#library("maptools")
 library("mapview")
-library("USAboundaries")
+#library("USAboundaries")
+library(USA.state.boundaries)
 library("ggplot2")
 library("ggthemes")
 library("plotmo")
@@ -413,28 +416,29 @@ function(input, output, session) {
   # save(joined_HU8,file="./all_HU8_shapes.RData")
   
   ##########################Get shapefiles for States in the U.S.###########################################
-  states_in_US = us_states()
-  states_in_US = states_in_US[states_in_US$name !='Alaska' & 
-                          states_in_US$name !='Hawaii' &
-                          states_in_US$name !='Puerto Rico',]
-  #print(states_in_US$name)
-  NE = states_in_US[states_in_US$name == 'Minnesota' | 
-                      states_in_US$name == 'Maine' |
-                      states_in_US$name == 'Delaware' |
-                      states_in_US$name == 'Wisconsin' | 
-                      states_in_US$name == 'Iowa' |
-                      states_in_US$name == 'Michigan' |
-                      states_in_US$name == 'Illinois' |
-                      states_in_US$name == 'Missouri' |
-                      states_in_US$name == 'Indiana' |
-                      states_in_US$name == 'Ohio' |
-                      states_in_US$name == 'New Jersey' |
-                      states_in_US$name == 'New York' |
-                      states_in_US$name == 'Pennsylvania' |
-                      states_in_US$name == 'Connecticut' |
-                      states_in_US$name == 'Vermont' |
-                      states_in_US$name == 'Massachusetts' |
-                      states_in_US$name == 'New Hampshire',]
+  #states_in_US = us_states() # USABoundaries
+  states_in_US = st_as_sf(state_boundaries_wgs84) # USA.state.boundaries
+  states_in_US = states_in_US[states_in_US$NAME !='Alaska' & 
+                          states_in_US$NAME !='Hawaii' &
+                          states_in_US$NAME !='Puerto Rico',]
+  #print(states_in_US$NAME)
+  NE = states_in_US[states_in_US$NAME == 'Minnesota' | 
+                      states_in_US$NAME == 'Maine' |
+                      states_in_US$NAME == 'Delaware' |
+                      states_in_US$NAME == 'Wisconsin' | 
+                      states_in_US$NAME == 'Iowa' |
+                      states_in_US$NAME == 'Michigan' |
+                      states_in_US$NAME == 'Illinois' |
+                      states_in_US$NAME == 'Missouri' |
+                      states_in_US$NAME == 'Indiana' |
+                      states_in_US$NAME == 'Ohio' |
+                      states_in_US$NAME == 'New Jersey' |
+                      states_in_US$NAME == 'New York' |
+                      states_in_US$NAME == 'Pennsylvania' |
+                      states_in_US$NAME == 'Connecticut' |
+                      states_in_US$NAME == 'Vermont' |
+                      states_in_US$NAME == 'Massachusetts' |
+                      states_in_US$NAME == 'New Hampshire',]
   NE_states_all = c('Minnesota','Maine','Delaware','Maryland','Wisconsin','Iowa','Michigan', 'Illinois','Indiana','Ohio','Kentucky',
                     'West Virginia','Virginia','New Jersey','New York','Pennsylvania','Connecticut', 'Vermont','Massachusetts','New Hampshire','Rhode Island',
                     'District of Columbia','North Dakota','South Dakota','Nebraska','Montana','Wyoming','Colorado','Kansas','Missouri',
