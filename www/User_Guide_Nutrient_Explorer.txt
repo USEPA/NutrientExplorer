@@ -167,4 +167,6 @@ Instructions for formatting new prediction dataset
 	as those in the trained model.
      2. The HU8 column is necessary for making predictions, but the data you provide could be at a different 	scale (e.g., HUC12 or other watershed level), but the column name will have to remain as "HU8."
   
+Note: if switching between the default and a new user dataset, it is best to close and re-open the app, to clear out the system memory.  
+
 For questions or comments contact: Michael Pennino at pennino.michael@epa.gov

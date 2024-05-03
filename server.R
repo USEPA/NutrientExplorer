@@ -193,6 +193,7 @@ function(input, output, session) {
   #####################################################################################################################
   
   loaded_data <- eventReactive(input$loadDataset,{
+<<<<<<< HEAD
     print(input$dataset_option)
     if (is.null(input$uploaded_dataset)){
       if (input$dataset_option=="LAGOS test") {
@@ -221,6 +222,36 @@ function(input, output, session) {
     }
     myData$HU8=as.factor(myData$HU8)
     myData$HU2=as.factor(myData$HU2)
+=======
+               print(input$dataset_option)
+            if (is.null(input$uploaded_dataset)){
+               if (input$dataset_option=="LAGOS test") {
+                   start_time <- Sys.time()
+                   #load("./Data/LAGOS_Data_Reduced_test.RData")
+                   myData <- read_fst("./Data/LAGOS_Data_less_variables_test.fst") ##YD changed
+                   colnames(myData)[colnames(myData)=="tn"]<- "TN"
+                   colnames(myData)[colnames(myData)=="tp"]<- "TP"
+                   colnames(myData)[colnames(myData)=="iws_roaddensity_density_mperha"]<- "iws_road_density_mperha"
+                   end_time <- Sys.time()
+                   time_to_load = difftime(end_time,start_time,units='mins')
+                   print(paste0("the runtime to load the test file is:",time_to_load))
+               }else if(input$dataset_option=="LAGOS"){
+                   load("./Data/LAGOS_Data_Reduced_1985_less_variables.RData") ##YD changed
+                   #myData = myData2  ##YD commented this line out
+                   colnames(myData)[colnames(myData)=="tn"]<- "TN"
+                   colnames(myData)[colnames(myData)=="tp"]<- "TP"
+                   colnames(myData)[colnames(myData)=="iws_roaddensity_density_mperha"]<- "iws_road_density_mperha"
+               }
+            }else{
+              shinyjs::disable("dataset_option") ##YD add
+              myData<-import_raw_data(input$uploaded_dataset$datapath,"csv",has_header=TRUE)
+              colnames(myData)[colnames(myData)=="tn"]<- "TN"
+              colnames(myData)[colnames(myData)=="tp"]<- "TP"
+              colnames(myData)[colnames(myData)=="iws_roaddensity_density_mperha"]<- "iws_road_density_mperha"
+            }
+              myData$HU8=as.factor(myData$HU8)
+              myData$HU2=as.factor(myData$HU2)
+>>>>>>> 91887b4ccbdaa5b1841c7898cf124747ba10ddee
     
     return(myData)
     
@@ -420,8 +451,13 @@ function(input, output, session) {
   #states_in_US = us_states() # USABoundaries
   states_in_US = st_as_sf(state_boundaries_wgs84) # USA.state.boundaries
   states_in_US = states_in_US[states_in_US$NAME !='Alaska' & 
+<<<<<<< HEAD
                                 states_in_US$NAME !='Hawaii' &
                                 states_in_US$NAME !='Puerto Rico',]
+=======
+                          states_in_US$NAME !='Hawaii' &
+                          states_in_US$NAME !='Puerto Rico',]
+>>>>>>> 91887b4ccbdaa5b1841c7898cf124747ba10ddee
   #print(states_in_US$NAME)
   NE = states_in_US[states_in_US$NAME == 'Minnesota' | 
                       states_in_US$NAME == 'Maine' |
@@ -462,6 +498,7 @@ function(input, output, session) {
     #Data = read.csv("C:/Users/mpennino/OneDrive - Environmental Protection Agency (EPA)/Profile/Downloads/LAGOS_Test.csv")
     #Data = read_fst(paste0(rf_dir,"LAGOS_Data_Reduced_test_original.fst"))
     #data1 = read_fst(paste0(rf_dir,"LAGOS_Data_Reduced_test.fst"))
+<<<<<<< HEAD
     varnames = data.frame(varnames = names(data))
     varnames$category = NA
     varnames$category = ifelse(str_detect(varnames$varnames,"slope") | 
@@ -554,6 +591,100 @@ function(input, output, session) {
     
     save(default_128,file="./default_variables.RData")
     data_to_model$group_for_names = c(lake_group,NLCD_group,aerosol_group,weather_group,P_inventory_group,N_inventory_group,vegetation_group,deposition_group)
+=======
+  varnames = data.frame(varnames = names(data))
+  varnames$category = NA
+  varnames$category = ifelse(str_detect(varnames$varnames,"slope") | 
+                               str_detect(varnames$varnames,"Slope")|
+                               str_detect(varnames$varnames,"iws")|
+                               str_detect(varnames$varnames,"IWS")|
+                               str_detect(varnames$varnames,"shed")|
+                               str_detect(varnames$varnames,"lake_area_ha")|
+                               str_detect(varnames$varnames,"perim_meters")|
+                               str_detect(varnames$varnames,"Depth")|
+                               str_detect(varnames$varnames,"depth")|
+                               str_detect(varnames$varnames,"stream_length")|
+                               str_detect(varnames$varnames,"stream_order")|
+                               str_detect(varnames$varnames,"stream_width")|
+                               str_detect(varnames$varnames,"Elevation"),'lake_char_names',varnames$category)
+  varnames$category = ifelse(str_detect(varnames$varnames,"NLCD") | 
+                               str_detect(varnames$varnames,"nlcd") |
+                               str_detect(varnames$varnames,"landuse")|
+                               str_detect(varnames$varnames,"LANDUSE"),'NLCD_names',varnames$category)
+  varnames$category = ifelse(str_detect(varnames$varnames,"Aerosol") | 
+                               str_detect(varnames$varnames,"aerosol")|
+                               str_detect(varnames$varnames,"AOD"),'aerosol_names',varnames$category)
+  varnames$category = ifelse(str_detect(varnames$varnames,"SNOW") | 
+                               str_detect(varnames$varnames,"FIRE") |
+                               str_detect(varnames$varnames,"LST") |
+                               str_detect(varnames$varnames,"Precip") | 
+                               str_detect(varnames$varnames,"Tmax") |
+                               str_detect(varnames$varnames,"Tmean") |
+                               str_detect(varnames$varnames,"Tmin") ,'weather_names',varnames$category)
+  
+  varnames$category = ifelse(str_detect(varnames$varnames,"N_")|
+                               str_detect(varnames$varnames,"TN_"),'N_inventory_names',varnames$category)                             
+  varnames$category = ifelse(str_detect(varnames$varnames,"P_")|
+                               str_detect(varnames$varnames,"TP_"),'P_inventory_names',varnames$category)                             
+  
+  varnames$category = ifelse(str_detect(varnames$varnames,"Atmo") | 
+                               str_detect(varnames$varnames,"Ndep") |
+                               str_detect(varnames$varnames,"Pdep") |
+                               str_detect(varnames$varnames,"Sdep")|
+                               str_detect(varnames$varnames,"Dep_"),'deposition_names',varnames$category)
+  varnames$category = ifelse(str_detect(varnames$varnames,"Vegetation")|
+                               str_detect(varnames$varnames,"NPP")|
+                               str_detect(varnames$varnames,"canopy")|
+                               str_detect(varnames$varnames,"Canopy"),'vegetation_names',varnames$category)                             
+  
+  # Remove incorrect categorizations
+  #varnames$category = ifelse(str_detect(varnames$varnames,"NPP"),'P_inventory_names',varnames$category)                             
+
+   lakevar = c("HU2","Year","Month","iws_ha","Elevation","lake_area_ha","MaxDepth","iws_slope_mean") # removed these variables: ,"iws_damdensity_pointsperha","iws_road_density_mperha","iws_canopy2001_mean","lake_perim_meters",
+   group_names_for_default$lake_char_names = c(lakevar,as.character(na.omit(varnames[varnames$category == 'lake_char_names',]$varnames)))
+   lake_group = rep("Date/Lake Characteristics",length(group_names_for_default$lake_char_names))
+  
+   #group_names_for_default$NLCD_names = c("nlcd_pct_0","nlcd_pct_11","nlcd_pct_31","nlcd_pct_52","nlcd_pct_71","NLCD_pct_developed","NLCD_pct_forest","NLCD_pct_farm","NLCD_pct_wetlands")
+   group_names_for_default$NLCD_names = as.character(na.omit(varnames[varnames$category == 'NLCD_names',]$varnames))
+   NLCD_group = rep("NLCD Land Use",length(group_names_for_default$NLCD_names))
+   
+   # group_names_for_default$P_inventory_names = c("P_Crop_removal.1","P_f_fertilizer.1","Legacy_P.1","P_livestock_Waste.1","P_nf_fertilizer.1","P_Deposition.1","P_human_waste_kg.1","P_kg_ww.1","Recovered_P.1",
+   #                       "P_Ag_Surplus.1","NAPI.1","P_Ag_Inputs.1","P_Anthro_Inputs.1")
+   group_names_for_default$P_inventory_names = as.character(na.omit(varnames[varnames$category == 'P_inventory_names',]$varnames))
+   P_inventory_group = rep("P Inventory",length(group_names_for_default$P_inventory_names))
+   
+   # group_names_for_default$N_inventory_names = c("N_CBNF.1","N_Crop_N_Rem.1","N_Fert_Farm.1","N_Fert_Urban.1","N_Forest_Fire.1","Human_N_Demand.1","N_Human_Waste.1","N_Imp_Balance.1",
+   #                       "N_Livestock_Waste.1","N_Manure_Recov.1","N_Rock.1","N_Total_Deposition.1","N_Total_nBNF.1","N_Ag_Surplus.1","NANI.1","N_Ag_Inputs.1","N_Anthro_Inputs.1")
+   group_names_for_default$N_inventory_names = as.character(na.omit(varnames[varnames$category == 'N_inventory_names',]$varnames))
+   N_inventory_group = rep("N Inventory",length(group_names_for_default$N_inventory_names))
+   
+   #group_names_for_default$vegetation_names = c("Vegetation","Vegetation_Lag1","Vegetation_Lag2","Vegetation_Lag3","Vegetation_YrMean","NPP","NPP_Lag1","NPP_Lag2","NPP_Lag3","NPP_YrMean")
+   group_names_for_default$vegetation_names = as.character(na.omit(varnames[varnames$category == 'vegetation_names',]$varnames))
+   vegetation_group = rep("Vegetation related",length(group_names_for_default$vegetation_names))
+   
+   # group_names_for_default$weather_names = c("SNOW","SNOW_Lag1","SNOW_Lag2","SNOW_Lag3","SNOW_YrMean","FIRE","FIRE_Lag1","FIRE_Lag2","FIRE_Lag3","FIRE_YrMean","LST","LST_Lag1","LST_Lag2","LST_Lag3","LST_YrMean","LSTAnomaly",
+   #                   "LSTAnomaly_Lag1","LSTAnomaly_Lag2","LSTAnomaly_Lag3","LSTAnomaly_YrMean","Precip","Precip_Lag1","Precip_Lag2","Precip_Lag3","Precip_YrMean","Tmax","Tmax_Lag1","Tmax_Lag2",
+   #                   "Tmax_Lag3","Tmax_YrMean","Tmean","Tmean_Lag1","Tmean_Lag2","Tmean_Lag3","Tmean_YrMean","Tmin","Tmin_Lag1","Tmin_Lag2","Tmin_Lag3","Tmin_YrMean")
+   group_names_for_default$weather_names = as.character(na.omit(varnames[varnames$category == 'weather_names',]$varnames))
+   weather_group = rep("Weather related",length(group_names_for_default$weather_names))
+   
+   # group_names_for_default$aerosol_names = c("AerosolSize_Aqua","AerosolSize_Aqua_Lag1","AerosolSize_Aqua_Lag2","AerosolSize_Aqua_Lag3","AerosolSize_Aqua_YrMean","AerosolSize_Terra","AerosolSize_Terra_Lag1",
+   #                   "AerosolSize_Terra_Lag2","AerosolSize_Terra_Lag3","AerosolSize_Terra_YrMean","AOD_Aqua","AOD_Aqua_Lag1","AOD_Aqua_Lag2","AOD_Aqua_Lag3","AOD_Aqua_YrMean","AOD_Terra",
+   #                   "AOD_Terra_Lag1","AOD_Terra_Lag2","AOD_Terra_Lag3","AOD_Terra_YrMean")
+   group_names_for_default$aerosol_names = as.character(na.omit(varnames[varnames$category == 'aerosol_names',]$varnames))
+   aerosol_group = rep("Aerosol related",length(group_names_for_default$aerosol_names))
+   
+   #group_names_for_default$deposition_names = c("Atmo_Pdep","Atmo_Pdep_Year.Lag1","Tot_Ndep","Tot_Ndep_Year.Lag1","Tot_Sdep","Tot_Sdep_Year.Lag1")
+   group_names_for_default$deposition_names = as.character(na.omit(varnames[varnames$category == 'deposition_names',]$varnames))
+   deposition_group = rep("Deposition",length(group_names_for_default$deposition_names))
+   
+   default_128 <- c(group_names_for_default$lake_char_names,group_names_for_default$NLCD_names,group_names_for_default$aerosol_names,group_names_for_default$weather_names,group_names_for_default$P_inventory_names,group_names_for_default$N_inventory_names,group_names_for_default$vegetation_names,group_names_for_default$deposition_names)
+   
+   data_to_model$default_variable_names = default_128
+   
+   save(default_128,file="./default_variables.RData")
+   data_to_model$group_for_names = c(lake_group,NLCD_group,aerosol_group,weather_group,P_inventory_group,N_inventory_group,vegetation_group,deposition_group)
+>>>>>>> 91887b4ccbdaa5b1841c7898cf124747ba10ddee
     
     # this part is to update and populate the choices (minimum and maximum values) for all the SelectInput and sliderInput 
     # in the later tabPanels after the dataset is loaded
@@ -756,6 +887,7 @@ function(input, output, session) {
   
   observeEvent(input$displayTable, {
     
+<<<<<<< HEAD
     # print("After rendering the map: ")
     # print(pryr::mem_used())
     shinyjs::show("summaryCP")
@@ -856,6 +988,108 @@ function(input, output, session) {
             digits = all_continuous()~2,
             missing_text="(Missing)") 
       }
+=======
+   # print("After rendering the map: ")
+   # print(pryr::mem_used())
+      shinyjs::show("summaryCP")
+      
+      
+      output$display_table <- renderUI({
+        if (length(data) > 0 ) {
+          div(withSpinner(dataTableOutput("display_summary_table"),type=2),style="font-size:110%;font-style:bold")
+        }
+      })
+      
+      output$display_table_cat <- renderUI({
+        if (length(data) > 0 ) {
+          div(withSpinner(dataTableOutput("display_summary_table_cat"),type=2),style="font-size:110%;font-style:bold")
+        }
+      })
+  }) ## observeEvent end, YD added
+      
+  ## YD added this observeEvent to make the table change with the radioButton choices
+  observeEvent(input$variable_groups, {
+         
+      data <- loaded_data()
+      req(input$variable_groups)
+      
+      ## generate group list and initialize group names
+      
+      myList <- generateGroupList(data)
+      
+      selected_data_1 <- myList$selected_data_1
+      selected_data_Lake <- myList$selected_data_Lake
+      group_names$Lake_Character = colnames(selected_data_Lake)
+      selected_data_Land <- myList$selected_data_Land
+      group_names$NLCD_Land_Use = colnames(selected_data_Land)
+      selected_data_Weather <- myList$selected_data_Weather
+      group_names$Weather_related = colnames(selected_data_Weather)
+      selected_data_Vegetation <- myList$selected_data_Vegetation
+      group_names$Vegetation = colnames(selected_data_Vegetation)
+      selected_data_Aerosol <- myList$selected_data_Aerosol
+      group_names$Aerosol_related = colnames(selected_data_Aerosol)
+      ##selected_data_N <- myList$selected_data_N  ## YD commented out
+      ##group_names$Aerosol_related = colnames(selected_data_Aerosol) ## YD commented out
+      selected_data_N_Scaled <- myList$selected_data_N_Scaled
+      group_names$N_Inventory_Scaled = colnames(selected_data_N_Scaled)
+      # selected_data_P <- myList$selected_data_P    ## YD commented out
+      # group_names$P_Inventory_Raw = colnames(selected_data_P)   ## YD commented out
+      selected_data_P_Scaled <- myList$selected_data_P_Scaled
+      group_names$P_Inventory_Scaled = colnames(selected_data_P_Scaled)
+      selected_data_Deposition <- myList$selected_data_Deposition
+      group_names$Deposition = colnames(selected_data_Deposition)
+      #selected_data_Sampling_Info <- myList$selected_data_Sampling_Info
+      #group_names$Sampling_Info = colnames(selected_data_Sampling_Info)
+      #save(myList,file="./test_myList.RData")
+      rm(myList)
+      
+      myChoice<- input$variable_groups
+        
+      print(myChoice)
+      
+      if (myChoice=="Selected by default") {
+        selected_to_summary$selected_data <- selected_data_1 ## only use group 1 by default
+      }else if(myChoice=="NLCD Land Use"){
+        selected_to_summary$selected_data <- selected_data_Land
+      }else if(myChoice=="Weather related"){
+        selected_to_summary$selected_data <- selected_data_Weather 
+      }else if(myChoice=="Vegetation related"){
+        selected_to_summary$selected_data <- selected_data_Vegetation 
+      }else if(myChoice=="Aerosol related"){
+        selected_to_summary$selected_data <- selected_data_Aerosol 
+      }else if(myChoice=="N Inventory"){
+        selected_to_summary$selected_data <- selected_data_N_Scaled 
+      }else if(myChoice=="P Inventory"){
+        selected_to_summary$selected_data <- selected_data_P_Scaled
+      }else if(myChoice=="Deposition"){
+        selected_to_summary$selected_data <- selected_data_Deposition  #YD fixed typo in "Deposition"
+        } #else if(myChoice=="Sampling Information"){
+      #  selected_to_summary$selected_data <- selected_data_Sampling_Info
+      #}
+      ## YD removed two groups from this line below
+      rm(selected_data_1,selected_data_Lake,selected_data_Land,selected_data_Aerosol,selected_data_N_Scaled,selected_data_P_Scaled,selected_data_Deposition) #,selected_data_Sampling_Info)
+      
+      print(length(selected_to_summary$selected_data))
+      ## YD added this if else loop to check if we have any variables in the selected group
+      ## if zero, no need to calculate summary
+      if (length(selected_to_summary$selected_data)>0){
+        ##YD added this loop because some numeric variables in this group were treated as categorical variables 
+        ##when have very few unique values
+        if (myChoice=="Aerosol related"){
+            summary_statistics_calculated <- selected_to_summary$selected_data %>%
+            tbl_summary(type = list(all_continuous()~"continuous",all_categorical()~"continuous"),
+                        statistic=list(all_continuous()~"{min};{mean};{median};{max};{sd}"),
+                        digits = all_continuous()~2,
+                        missing_text="(Missing)") 
+        }else{
+             summary_statistics_calculated <- selected_to_summary$selected_data %>%
+             tbl_summary(
+                         statistic=list(all_continuous()~"{min};{mean};{median};{max};{sd}",
+                         all_categorical()~"{n};{N};{p}%"),
+                         digits = all_continuous()~2,
+                         missing_text="(Missing)") 
+        }
+>>>>>>> 91887b4ccbdaa5b1841c7898cf124747ba10ddee
       summary_table <- summary_statistics_calculated[[1]] ## only carry on the statistics data frame
       #save(summary_table,file="./test_summary_table.RData")
       
@@ -1894,6 +2128,7 @@ function(input, output, session) {
     
     
     data_selected_after_sliders <- data %>%
+<<<<<<< HEAD
       subset((Year>=year_range_slider_values[1]&Year<=year_range_slider_values[2])|Year=="NA") %>%
       subset(Month>=month_range_slider_values[1]&Month<=month_range_slider_values[2]) %>%
       subset(iws_ha>=iws_ha_range_slider_values[1]&iws_ha<=iws_ha_range_slider_values[2]) %>%
@@ -1907,6 +2142,21 @@ function(input, output, session) {
       subset((LogTN>=LogTN_range_slider_values[1]&LogTN<=LogTN_range_slider_values[2])|is.na(LogTN)) %>%
       subset((TP>=tp_range_slider_values[1]&TP<=tp_range_slider_values[2])|is.na(TP)) %>%
       subset((LogTP>=LogTP_range_slider_values[1]&LogTP<=LogTP_range_slider_values[2])|is.na(LogTP))
+=======
+                                 subset((Year>=year_range_slider_values[1]&Year<=year_range_slider_values[2])|Year=="NA") %>%
+                                 subset(Month>=month_range_slider_values[1]&Month<=month_range_slider_values[2]) %>%
+                                 subset(iws_ha>=iws_ha_range_slider_values[1]&iws_ha<=iws_ha_range_slider_values[2]) %>%
+                                 #subset(iws_perimkm>=iws_perimkm_range_slider_values[1]&iws_perimkm<=iws_perimkm_range_slider_values[2]) %>%
+                                 subset(Elevation>=elevation_range_slider_values[1]&Elevation<=elevation_range_slider_values[2]) %>%
+                                 subset(lake_area_ha>=lake_area_range_slider_values[1]&lake_area_ha<=lake_area_range_slider_values[2]) %>%
+                                 #subset(lake_perim_meters>=lake_perimeter_range_slider_values[1]&lake_perim_meters<=lake_perimeter_range_slider_values[2]) %>%
+                                 #subset((MeanDepth>=lake_meanDepth_range_slider_values[1]&MeanDepth<=lake_meanDepth_range_slider_values[2])|is.na(MeanDepth)) %>%
+                                 subset((MaxDepth>=lake_maxDepth_range_slider_values[1]&MaxDepth<=lake_maxDepth_range_slider_values[2])|is.na(MaxDepth)) %>%
+                                 subset((TN>=tn_range_slider_values[1]&TN<=tn_range_slider_values[2])|is.na(TN)) %>%
+                                 subset((LogTN>=LogTN_range_slider_values[1]&LogTN<=LogTN_range_slider_values[2])|is.na(LogTN)) %>%
+                                 subset((TP>=tp_range_slider_values[1]&TP<=tp_range_slider_values[2])|is.na(TP)) %>%
+                                 subset((LogTP>=LogTP_range_slider_values[1]&LogTP<=LogTP_range_slider_values[2])|is.na(LogTP))
+>>>>>>> 91887b4ccbdaa5b1841c7898cf124747ba10ddee
     
     print(paste0("the number of rows after all the sliders is:",nrow(data_selected_after_sliders)))
     
@@ -2924,6 +3174,7 @@ function(input, output, session) {
       shinyjs::hide("random_forest_output_panel")
       shinyjs::show("regression_panel")
       shinyjs::show("regression_correlation_analysis_panel")
+<<<<<<< HEAD
       
       data <- data_to_model$data_subset
       
@@ -3003,6 +3254,87 @@ function(input, output, session) {
         actionButton(inputId="MakeRegressionModelPrediction", label="Step 4: Make Model Predictions",style="color:blue;background-color:black")
       })
       
+=======
+    
+        data <- data_to_model$data_subset
+          
+          output$select_LR_end_points <- renderUI({
+            selectizeInput("select_LR_end_points",label ="please select end points",
+                           choices=c("TN","TP","LogTN","LogTP"),
+                           multiple = FALSE,
+                           selected="LogTP",
+                           options = list(hideSelected = FALSE))
+          })
+          
+          # output$userInput_LR_select_group <- renderUI({
+          #   checkboxGroupInput("selectGroupLR","Select predictor variables by groups",c("NLCD Land Use","P Inventory","N Inventory","Aerosol related","Weather related","Vegetation related","Deposition","Date/Lake Characteristics"))
+          # })
+          
+          output$userInput_link_models <- renderUI({
+            actionButton(inputId="use_RF_variables_button", label="Link variables from random forest",style="color:blue;background-color:black")
+          })
+          
+          topN_tooltip_text = paste0("the total number of the most important variables linked from the random forest model.","Default is 10.")
+          output$userInput_top_n <- renderUI({
+            tipify(numericInput("topN",label ="N important variables",10,min=1,max=100,step=1.0),topN_tooltip_text,placement="right",trigger="hover")
+          })
+          # output$userInput_LR_select <- renderUI({
+          #   selectizeInput("select_variables_for_LR",label ="Selected predictor variables:",
+          #                  choices=split(data_to_model$default_variable_names,data_to_model$group_for_names),
+          #                  multiple = TRUE,
+          #                  options = list(hideSelected = FALSE,plugins=list('remove_button')))
+          #   
+          # })
+          
+          # output$tooltips_space_holder <- renderUI({
+          #   print(data_to_model$default_variable_names[1])
+          #   name_desc <- name_description_subset$Description
+          #   w <- lapply(seq_len(length(data_to_model$default_variable_names)),function(i){
+          #     selectizeTooltip(id = "select_variables_for_LR", choice = data_to_model$default_variable_names[i], title = name_desc[i], placement = "right") 
+          #   })
+          #   
+          #   do.call(fluidPage,w)
+          # })
+          
+          output$userInput_correlation_criteria <- renderUI({
+            numericInput("corrValue",label ="correlation criteria",0.9,min=0.5,max=0.95,step=0.05)
+          })
+          
+          output$correlation_analysis <- renderUI({
+            actionButton(inputId="RunCorrelationAnalysis", label="Step 1: Run Correlation Analysis",style="color:blue;background-color:black",onclick=js_remove_tooltips)
+          })
+          
+          #nvmax_tooltip_text = paste0("nvmax is the maxinum number of variables used in 'regsubsets' function.","Default is 20.")
+          #nbest_tooltip_text = paste0("nbest is the number of best models to keep in 'regsubsets' function.","Default is 1.")
+          #nbest_models_tooltip_text = paste0("the number of best models to display for the model selection results.","Default is 5.")
+          delta_BIC_tooltip_text = paste0("delta BIC value from the best model with the lowest BIC (Bayesian Information Criterion) for 
+                                          the model selection results.","Default is -2.0. ")
+          
+          output$userInput_LR_nvmax <- renderUI({
+            numericInput("nvmax",label ="nvmax",20,min=1,max=50)
+          })
+          
+          output$userInput_LR_nbest <- renderUI({
+            numericInput("nbest",label ="nbest",1,min=1,max=5)
+          })
+          
+          output$userInput_nbest_to_display <- renderUI({
+            numericInput("nbest_models_to_display",label ="number of best final models to display",5,min=2,max=15)
+          })
+          
+          output$model_selection <- renderUI({
+            actionButton(inputId="RunModelSelection", label="Step 2: Run Subset Selection",style="color:blue;background-color:black",onclick=js_remove_tooltips)
+          })
+          
+          output$confirm_to_run_LR <- renderUI({
+            actionButton(inputId="RunRegressionModel", label="Step 3: Finalize Regression Model",style="color:blue;background-color:black")
+          })
+          
+          output$confirm_to_run_LR_prediction <- renderUI({
+            actionButton(inputId="MakeRegressionModelPrediction", label="Step 4: Make Model Predictions",style="color:blue;background-color:black")
+          })
+    
+>>>>>>> 91887b4ccbdaa5b1841c7898cf124747ba10ddee
     }else if (input$model_type == "Random forest (on data subset)"){
       shinyjs::hide("regression_panel")
       shinyjs::hide("regression_correlation_analysis_panel")
@@ -3304,6 +3636,7 @@ function(input, output, session) {
     
     data <- data_to_model$data_subset
     
+<<<<<<< HEAD
     selected_variables = selected_variables_for_regression()
     
     if (length(selected_variables)==0){
@@ -4001,6 +4334,251 @@ function(input, output, session) {
       actionButton(inputId="showLRModelPredictionMapTwoColors", label="Show prediction map in bicolor (Default Data)",style="color:blue;background-color:black")
       #)
     })
+=======
+     myTable <- DT::datatable(table_to_display,options = list(
+       scrollX = TRUE, #allow user to scroll wide tables horizontally
+       dom ='t', # dom accepts character string "t" means only show table part
+       stateSave = FALSE,
+       pageLength = input$nvmax,
+       autoWidth = FALSE,
+       searching = FALSE,
+       lengthChange = FALSE,
+       columnDefs = list(list(className="dt-center",targets="_all"))
+     )) %>%
+     formatRound(c(1:3,5:6),digits=6) %>%
+       formatStyle("VIF",color=JS(paste0("value > ",10,"? 'red' : ''"))) %>%
+       formatStyle("VIF",backgroundColor=JS(paste0("value > ",10,"? 'black' : ''")))
+     return(myTable)
+     
+   })  ##renderDataTable end multicollinearity 
+   
+   output$display_lr_summary_table_footnote <- renderUI({
+     verbatimTextOutput("lr_summary_table_footnote")
+   })
+   
+   output$lr_summary_table_footnote <- renderText({
+     lr_footnote_text_line1= "The cells marked in red under the column 'VIF' indicate that multicollinearity was detected in the model,"
+     lr_footnote_text_line2= "Please pick one or more associated predictor variables and remove them from the selected predictor variables list on the top."
+     lr_footnote_text_line3= "Then rerun the processes from step 2 to 3."
+     lr_footnote_text_line4= "If there is no cells marked in red, you may proceed to the next step by clicking on 'Step 4: Make Model Predictions' "
+     paste(lr_footnote_text_line1,lr_footnote_text_line2,lr_footnote_text_line3,lr_footnote_text_line4,sep="\n")
+   })
+   
+   ## gather model uncertainty metrics for the final regression model and display them in a table
+   
+   summary_metrics <- summary(the_final_LR_model)
+   r2_report <- summary_metrics$r.squared  # Multiple R-squared
+   adj_r2_report <- summary_metrics$adj.r.squared # Adjusted R-squared
+   sigma_report <- summary_metrics$sigma # Residual standard error
+   RMSE_report <- sqrt(mean(the_final_LR_model$residuals^2)) # Root mean square error
+   mean_bias <-(sum(LR_predictions)-sum(LR_obs))/length(LR_obs) #mean bias
+   SD <- sd(LR_predictions-LR_obs) #Standard deviation of the error
+   nse <- vnse(LR_predictions, LR_obs,na.rm=T) # Nash-Sutcliffe efficiency coefficient (added by MJP)
+   
+   table_col_1 = c("Multiple R-squared","Adjusted R-squared","Residual standard error",
+                    "Root Mean Squared Error","Mean Bias","Standard deviation of the error",
+                   "Nash-Sutcliffe efficiency coefficient")
+   table_col_2 = c(r2_report,adj_r2_report,sigma_report,RMSE_report,mean_bias,SD,nse)
+   table_col_2 = formatC(table_col_2,digits=4,format="f")
+   
+   table_to_print <- data.frame(cbind(table_col_1,table_col_2))
+   colnames(table_to_print) <- c("Model Uncertainty Metrics","Values")
+   
+   output$RegressionFinalModelPerformanceTable <- renderTable({
+     table_to_print},type="html",bordered=TRUE,striped=TRUE,align="c")
+   
+   } ## if else loop end
+   
+ }) ## observeEvent end
+ 
+ observeEvent(input$MakeRegressionModelPrediction, {
+   
+   shinyjs::hide("regression_correlation_analysis_panel")
+   shinyjs::hide("regression_model_selection_output_panel")
+   shinyjs::hide("regression_model_final_panel")
+   shinyjs::show("regression_model_prediction_panel")
+   
+   # output$display_load_button <- renderUI({
+   #   fileInput(inputId="loaded_newDataset", label="Load new dataset", multiple=FALSE,accept=c("text/csv",".csv",".RData"))
+   # })
+   
+   output$look_back_step_1to3 <- renderUI({
+     actionButton(inputId="look_back_steps", label="< Look back at the previous steps",style="color:blue;background-color:black")
+   })
+   
+   output$LR_Break1 <- renderUI({
+     div(
+       h5("The following 2 sliders and toggle button are used for default datasets only",style="color:red;font-style:bold")
+     )
+   })
+   
+   output$select_LR_prediction_year_slider <- renderUI({
+     sliderInput("LR_predict_year","Prediction year:",min=2002,max=2012,value=2007,step=5,round=0,sep="")
+   })
+   
+   output$select_LR_prediction_month_slider <- renderUI({
+     sliderInput("LR_predict_month","Prediction month:",min=2,max=12,value=7,step=5,round=0,sep="")
+   })
+   
+   maxDepth_tooltip_text = paste0("Please select the lake maxDepth level at HUC8 scale, 'Shallow (3.6m)','Average (10.1m)'and 'Deep (24.4m)' represent 10%, 50% and 90% of LAGOS lakes maxDepth respectively.")
+   output$select_LR_prediction_lake_maxDepth_button <- renderUI({
+     tipify(radioButtons("LR_lake_maxDepth",label="Lake maxDepth",choices=c("Shallow","Average","Deep"),selected="Average",inline=FALSE),maxDepth_tooltip_text,
+            placement="right",trigger="hover")
+   })
+   
+ 
+   
+   output$LR_Break2 <- renderUI({
+     div(
+       h5("!!!Make Sure to Click Correct Button Based on the Dataset Being Used!!!",style="color:red;font-style:bold")
+     )
+   })
+   
+   # MJP added
+   output$LR_Break3 <- renderUI({
+     div(
+       h5("Default Map Buttons (!!!Only click if loaded default dataset in first section!!!):",style="color:red;font-style:bold")
+     )
+   })
+   
+   # original for LR (modified by MJP)
+   output$display_map_button <- renderUI({
+     #div(
+       #h5("---------------------------------------",style="color:red;font-style:bold"),
+       #h5("Make Sure You only click Correct Button Based on the Dataset Being Used",style="color:red;font-style:bold"),
+       #h5("---------------------------------------",style="color:red;font-style:bold"),
+       actionButton(inputId="showModelPredictionMap", label="Show LR prediction map for whole region (if using default dataset only!!!)",style="color:blue;background-color:black")
+     #)
+   })
+   
+   # original LR
+   output$display_download_results_button <- renderUI({
+     downloadButton(outputId="savePredictionResults", label="Download LR prediction results to csv (Default Data)",style="color:blue;background-color:black")
+   })
+   
+   # original LR
+   output$download_map_button <- renderUI({
+     downloadButton(outputId="savePredictionMap", label="Save LR prediction map (Default Data)",style="color:blue;background-color:black")
+   })
+   
+   
+   output$LR_Break4a <- renderUI({
+     div(id="LR_h5",
+       h5("New Dataset Load Button:",style="color:red;font-style:bold")
+     )
+   })
+   
+   # MJP changes for LR
+   output$display_lr_load_button <- renderUI({
+     fileInput(inputId="uploaded_lr_newDataset", label="Load new dataset (if have new dataset only!!!)", multiple=FALSE,accept=c("text/csv",".csv",".RData"))
+   })
+   
+   output$LR_Break4 <- renderUI({
+     div(
+       h5("New Dataset Map Buttons (!!!Only click if uploaded new dataset!!!):",style="color:red;font-style:bold")
+     )
+   })
+   
+   # mjp for LR user data
+   output$display_map_button2 <- renderUI({
+     actionButton(inputId="showModelPredictionMap2", label="Show LR prediction map for whole region (if using new dataset only!!!)",style="color:blue;background-color:black")
+   })
+   
+   output$adjustRegressionMapColorLegend <- renderUI({
+     sliderInput("LR_color_legend_range","Adjust map color legend here:",min=0,max=10,value=c(1,6),step=0.5,sep="")
+   })
+   
+   # output$LR_Break5 <- renderUI({
+   #   div(
+   #     h5("Choose buttons for either default or new datasets:",style="color:red;font-style:bold")
+   #   )
+   # })
+   
+   
+   # mjp LR
+   output$display_download_results_button2 <- renderUI({
+     downloadButton(outputId="savePredictionResults2", label="Download LR prediction results to csv (New User Data)",style="color:blue;background-color:black")
+   })
+   
+   
+   
+   # mjp LR
+   output$download_map_button2 <- renderUI({
+     downloadButton(outputId="savePredictionMap2", label="Save LR prediction map (New User Data)",style="color:blue;background-color:black")
+   })
+   
+   cutoff_tooltip_text = paste0("The endpoint concentration criteria is used to display the prediction map in two different colors (above or below this criteria) accordingly."," Default is 50.")
+   output$display_userInput_LR_cutoff <- renderUI({
+     tipify(numericInput("LR_cutoff_value",label ="Endpoint concentration criteria",50,min=1,max=300,step=1),cutoff_tooltip_text,placement="right",trigger="hover")
+   })
+   
+   output$LR_Break6 <- renderUI({
+     div(
+       h5("!!!Only use the following buttons after creating the color map above!!!",style="color:red;font-style:bold")
+     )
+   })
+   
+   output$LR_Break7 <- renderUI({
+     div(
+       h5("Only use the next two buttons if using default dataset:",style="color:red;font-style:bold")
+     )
+   })
+   
+   output$display_LR_map_in_two_colors_button <- renderUI({
+     #div(
+      # h5("---------------------------------------",style="color:red;font-style:bold"),
+       #h5("Only use the following buttons after creating the color map above!!!",style="color:red;font-style:bold"),
+       #h5("---------------------------------------",style="color:red;font-style:bold"),
+       #h5("Only use these two buttons if using default dataset",style="color:red;font-style:bold"),
+     actionButton(inputId="showLRModelPredictionMapTwoColors", label="Show prediction map in bicolor (Default Data)",style="color:blue;background-color:black")
+     #)
+     })
+   
+   output$download_LR_map_in_two_colors_button <- renderUI({
+     downloadButton(outputId="saveLRPredictionMapTwoColors", label="Save prediction map in bicolor (Default Data)",style="color:blue;background-color:black")
+   })
+  
+   output$LR_Break8 <- renderUI({
+     div(
+       h5("Only use the next two buttons if uploaded new dataset above:",style="color:red;font-style:bold")
+     )
+   })
+   
+   # MJP
+   output$display_LR_map_in_two_colors_button2 <- renderUI({
+     #div(
+       #h5("Only use these two buttons if uploaded new dataset above",style="color:red;font-style:bold"),
+     actionButton(inputId="showLRModelPredictionMapTwoColors2", label="Show prediction map in bicolor (New Data)",style="color:blue;background-color:black")
+     #)
+     })
+   
+   # MJP
+   output$download_LR_map_in_two_colors_button2 <- renderUI({
+     downloadButton(outputId="saveLRPredictionMapTwoColors2", label="Save prediction map in bicolor (New Data)",style="color:blue;background-color:black")
+   })
+   
+   ##YD added
+   print(paste0("inside MakeRegressionModelPrediction now, check logic:",is.null(input$uploaded_dataset)))
+   
+   if (!is.null(input$uploaded_dataset)){
+     delay(1000,shinyjs::hide("LR_predict_year"))
+     delay(1000,shinyjs::hide("LR_predict_month"))
+     delay(1000,shinyjs::hide("LR_lake_maxDepth"))
+     delay(1200,shinyjs::hide("showModelPredictionMap"))
+     delay(1200,shinyjs::hide("savePredictionResults"))
+     delay(1200,shinyjs::hide("savePredictionMap"))
+     delay(1500,shinyjs::hide("showLRModelPredictionMapTwoColors"))
+     delay(1500,shinyjs::hide("saveLRPredictionMapTwoColors"))
+   }else{
+     delay(1000,shinyjs::hide("LR_h5"))
+     delay(1000,shinyjs::hide("uploaded_lr_newDataset"))
+     delay(1200,shinyjs::hide("showModelPredictionMap2"))
+     delay(1200,shinyjs::hide("savePredictionResults2"))
+     delay(1200,shinyjs::hide("savePredictionMap2"))
+     delay(1500,shinyjs::hide("showLRModelPredictionMapTwoColors2"))
+     delay(1500,shinyjs::hide("saveLRPredictionMapTwoColors2"))
+   }
+>>>>>>> 91887b4ccbdaa5b1841c7898cf124747ba10ddee
     
     output$download_LR_map_in_two_colors_button <- renderUI({
       downloadButton(outputId="saveLRPredictionMapTwoColors", label="Save prediction map in bicolor (Default Data)",style="color:blue;background-color:black")
@@ -4012,6 +4590,7 @@ function(input, output, session) {
       )
     })
     
+<<<<<<< HEAD
     # MJP
     output$display_LR_map_in_two_colors_button2 <- renderUI({
       #div(
@@ -4437,6 +5016,363 @@ function(input, output, session) {
     best_mtry = floor(sqrt(length(selected_variables_for_regression())))
     updateNumericInput(session,"mtry",value=best_mtry)
   })
+=======
+   load("./Data/all_HU8_shapes.RData")
+   my_fileName <- paste("./Data/HUC8",isolate(input$LR_predict_year),isolate(input$LR_predict_month),isolate(input$LR_lake_maxDepth),"MaxDepth.RData",sep="_")
+   print(my_fileName)
+   if (file.exists(my_fileName)){
+     load(my_fileName)
+     confirm_message = paste0("a new dataset: ",my_fileName," is loaded to make predictions.")
+     shinyalert("",confirm_message,closeOnClickOutside = TRUE,closeOnEsc = TRUE,
+                confirmButtonText="OK",inputId = "confirm1")  
+   }else{
+     no_file_message = paste0("new dataset: ",my_fileName," does not exist in the data folder.")
+     shinyalert("Alert",no_file_message,closeOnClickOutside = TRUE,closeOnEsc = TRUE,
+                confirmButtonText="OK",inputId = "noFile1")  
+   } 
+   HUC8_newData = na.roughfix(HUC8_newData)
+   
+   LR_predictions <- predict(lr_model_output$final_LR_model, newdata=HUC8_newData)
+   pred2 = as.data.frame(LR_predictions)
+   names(pred2)[1]="predicted"
+   ## convert LogTP and LogTN into TP and TN
+   if (input$select_LR_end_points=="LogTP" | input$select_LR_end_points=="LogTN"){
+     pred2$converted=exp(pred2$predicted)
+     names(pred2)[2]="HU8"
+   }else{
+     names(pred2)[1]="HU8"
+   }
+   pred2$huc8 = formatC(as.numeric(as.character(HUC8_newData$HUC8)), width = 8, format = "d",flag = "0") # add zero in front of any
+   #print(length(pred2))
+   to_download$LR_prediction =pred2
+   
+   if (input$select_LR_end_points=="LogTP"){
+     names(to_download$LR_prediction)[1:2]=c("LogTP","TP")
+     name_in_plot_title = "TP"
+   }else if (input$select_LR_end_points=="LogTN"){
+     names(to_download$LR_prediction)[1:2]=c("LogTN","TN")
+     name_in_plot_title = "TN"
+   }else{
+     names(to_download$LR_prediction)[1]=input$select_LR_end_points
+     name_in_plot_title = input$select_LR_end_points
+   }
+   myjoinedPred = merge(joined_HU8,pred2,by="huc8",duplicateGeoms=TRUE)
+   
+   #myjoinedPred_to_map <- sp.na.omit(myjoinedPred,col.name="HU8",margin=1) # YD commented this line out
+   #print(length(myjoinedPred_to_map))
+   myjoinedPred_to_map <- st_as_sf(myjoinedPred)
+   max_HU8 = round(1.2*max(na.omit(myjoinedPred_to_map$HU8)))
+   min_HU8 = round(min(na.omit(myjoinedPred_to_map$HU8)))
+   updateSliderInput(session,"LR_color_legend_range",min=0,max=max_HU8,value=c(round(0.8*min_HU8),round(0.8*max_HU8))) 
+   #color_HUC8 = colorNumeric(palette=input$select_color,domain=myjoinedPred_to_map$HU8) ## domain=myjoinedPred_to_map$HU8 if you want color legend to change
+   
+   rm(joined_HU8,HUC8_newData,myjoinedPred)
+   ##YD added
+   myjoinedPred_to_map <- myjoinedPred_to_map[!is.na(myjoinedPred_to_map$HU8),]
+   # output$lr_prediction_map <- renderLeaflet ({
+   #   print("inside display multi-linear regression prediction map now")
+   #   my_color_breaks = seq(from=input$LR_color_legend_range[1],to=input$LR_color_legend_range[2],by=0.5)
+   #   print(my_color_breaks)
+   #   color_HUC8 = colorNumeric(palette=input$select_color,my_color_breaks)
+   #   #print(color_HUC8)
+   #   LR_map <- leaflet() %>% addTiles() %>% addResetMapButton() %>%
+   #     setView(lng=-80.8,lat=40,zoom=4) %>%
+   #     addPolygons(data=myjoinedPred_to_map,
+   #                 fillColor = ~color_HUC8(HU8),  
+   #                 color="red",
+   #                 smoothFactor = 0.5,
+   #                 fillOpacity = 1,
+   #                 weight=1,
+   #                 popup=paste("HUC8 ID: ",myjoinedPred_to_map$huc8,"<br>",
+   #                             paste0(input$select_LR_end_points,": "),formatC(myjoinedPred_to_map$HU8,format='f',digits=3))
+   #     ) %>% # addPolygons end
+   #     addLegend(pal=color_HUC8,values=my_color_breaks,position='topright',title=input$select_LR_end_points,opacity=1) #myjoinedPred_to_map$HU8
+   # }) # renderLeaflet end
+   
+   output$lr_prediction_map <- renderPlot ({
+     req(input$LR_color_legend_range)
+     print("inside rendering the multi-linear regression prediction HUC8 map now...")
+     
+     to_download$LR_map <- ggplot()+
+       ggtitle(paste0(name_in_plot_title," prediction in HUC8"))+
+       geom_sf(data=NE,color="black",fill=NA,size=0.3)+
+       geom_sf(myjoinedPred_to_map,mapping=aes(fill=HU8),colour="red",alpha=0.7,size=0.05)+
+       scale_fill_gradientn(colors=viridis_pal()(9),name=paste0(name_in_plot_title," (\u03bcg/L)"),limits=c(input$LR_color_legend_range[1],input$LR_color_legend_range[2]))+
+       theme(panel.background = element_blank())+ # remove grey background
+       theme(plot.title=element_text(hjust=0.5))+ # put the title at center
+       theme(axis.text = element_blank())+ # remove axis text
+       theme(axis.ticks = element_blank()) # remove axis text
+     print(to_download$LR_map)
+     
+   })
+   
+  # rm(mjoinedPred_to_map,LR_map)
+  
+ }) #observeEvent1 end
+ 
+ #---------------------------------------------------------------------------------
+ uploaded_lr_new_data <- eventReactive(input$uploaded_lr_newDataset,{ # mjp2 should be loaded was load_rf_newDataset
+   newUserData<-import_raw_data(input$uploaded_lr_newDataset$datapath,"csv",has_header=TRUE)
+   
+   #e = new.env()
+   #name <- load(input$loaded_rf_newDataset$datapath,envir = e)
+   #newUserData <- e[[name]]
+   #print(nrow(newData))
+   return(newUserData)
+ })
+ 
+ observe(uploaded_lr_new_data())
+ 
+ observeEvent(input$dataInfo,{
+   shinyjs::runjs("swal.close();")
+ })
+ #---------------------------------------------------------------------------------
+ 
+ # LR Map New Dataset
+ observeEvent(input$showModelPredictionMap2, { #observeEvent2
+   
+   output$ShowRegressionModelPredictionMap2 <- renderUI({
+     
+     withSpinner(plotOutput("lr_prediction_map2",width="800px",height="600px"),type=2)
+   })
+   
+   load("./Data/all_HU8_shapes.RData")
+   
+   # my_fileName <- paste("./Data/HUC8",isolate(input$LR_predict_year),isolate(input$LR_predict_month),isolate(input$LR_lake_maxDepth),"MaxDepth.RData",sep="_")
+   # print(my_fileName)
+   # if (file.exists(my_fileName)){
+   #   load(my_fileName)
+   #   confirm_message = paste0("a new dataset: ",my_fileName," is loaded to make predictions.")
+   #   shinyalert("",confirm_message,closeOnClickOutside = TRUE,closeOnEsc = TRUE,
+   #              confirmButtonText="OK",inputId = "confirm1")  
+   # }else{
+   #   no_file_message = paste0("new dataset: ",my_fileName," does not exist in the data folder.")
+   #   shinyalert("Alert",no_file_message,closeOnClickOutside = TRUE,closeOnEsc = TRUE,
+   #              confirmButtonText="OK",inputId = "noFile1")  
+   # } 
+   
+   newUserData <- uploaded_lr_new_data() 
+   
+   HUC8_newData = na.roughfix(newUserData)
+   
+   LR_predictions <- predict(lr_model_output$final_LR_model, newdata=HUC8_newData)
+   pred2 = as.data.frame(LR_predictions)
+   names(pred2)[1]="predicted"
+   ## convert LogTP and LogTN into TP and TN
+   if (input$select_LR_end_points=="LogTP" | input$select_LR_end_points=="LogTN"){
+     pred2$converted=exp(pred2$predicted)
+     names(pred2)[2]="HU8"
+   }else{
+     names(pred2)[1]="HU8"
+   }
+   pred2$huc8 = formatC(as.numeric(as.character(HUC8_newData$HUC8)), width = 8, format = "d",flag = "0") # add zero in front of any
+   #print(length(pred2))
+   #save(pred2,file="./pred2_check.RData")
+   
+   to_download$LR_prediction2 =pred2
+   
+   if (input$select_LR_end_points=="LogTP"){
+     names(to_download$LR_prediction2)[1:2]=c("LogTP","TP")
+     name_in_plot_title = "TP"
+   }else if (input$select_LR_end_points=="LogTN"){
+     names(to_download$LR_prediction2)[1:2]=c("LogTN","TN")
+     name_in_plot_title = "TN"
+   }else{
+     names(to_download$LR_prediction2)[1]=input$select_LR_end_points
+     name_in_plot_title = input$select_LR_end_points
+   }
+   myjoinedPred = merge(joined_HU8,pred2,by="huc8",duplicateGeoms=TRUE)
+   
+   #myjoinedPred_to_map <- sp.na.omit(myjoinedPred,col.name="HU8",margin=1) #YD commented this line out
+   #print(length(myjoinedPred_to_map))
+   myjoinedPred_to_map <- st_as_sf(myjoinedPred)
+   #YD changed
+   max_HU8 = round(1.2*max(na.omit(myjoinedPred_to_map$HU8)))
+   min_HU8 = round(min(na.omit(myjoinedPred_to_map$HU8)))
+   updateSliderInput(session,"LR_color_legend_range",min=0,max=max_HU8,value=c(round(0.8*min_HU8),round(0.8*max_HU8))) 
+   #color_HUC8 = colorNumeric(palette=input$select_color,domain=myjoinedPred_to_map$HU8) ## domain=myjoinedPred_to_map$HU8 if you want color legend to change
+   
+   rm(joined_HU8,HUC8_newData,myjoinedPred)
+   ##YD added
+   myjoinedPred_to_map <- myjoinedPred_to_map[!is.na(myjoinedPred_to_map$HU8),]
+   
+   output$lr_prediction_map2 <- renderPlot ({
+     req(input$LR_color_legend_range)
+     print("inside rendering the multi-linear regression prediction HUC8 map now...")
+     
+     to_download$LR_map2 <- ggplot()+
+       ggtitle(paste0(name_in_plot_title," prediction in HUC8"))+
+       geom_sf(data=NE,color="black",fill=NA,size=0.3)+
+       geom_sf(myjoinedPred_to_map,mapping=aes(fill=HU8),colour="red",alpha=0.7,size=0.05)+
+       scale_fill_gradientn(colors=viridis_pal()(9),name=paste0(name_in_plot_title," (\u03bcg/L)"),limits=c(input$LR_color_legend_range[1],input$LR_color_legend_range[2]))+
+       theme(panel.background = element_blank())+ # remove grey background
+       theme(plot.title=element_text(hjust=0.5))+ # put the title at center
+       theme(axis.text = element_blank())+ # remove axis text
+       theme(axis.ticks = element_blank()) # remove axis text
+     print(to_download$LR_map2)
+     
+   })
+   
+   # rm(mjoinedPred_to_map,LR_map)
+   
+ }) #observeEvent2 end
+ 
+ # Original Default
+ output$savePredictionResults <- downloadHandler(
+   filename = function(){paste(input$select_LR_end_points,"_linear_regression_model_prediction_results_",Sys.Date(),".csv",sep="")},
+   content = function(file){
+     write.csv(to_download$LR_prediction,file,row.names=FALSE)
+   }
+ )
+ output$savePredictionMap <- downloadHandler(
+   filename = function(){paste("linear_regression_model_prediction_map_",Sys.Date(),".png",sep="")},
+   content = function(file){
+     ggsave(file,plot=to_download$LR_map,dpi=300,width=12,height=10)
+   }
+ )
+ 
+ # MJP added for New User Data
+ output$savePredictionResults2 <- downloadHandler(
+   filename = function(){paste(input$select_LR_end_points,"_linear_regression_model_prediction_results_",Sys.Date(),".csv",sep="")},
+   content = function(file){
+     write.csv(to_download$LR_prediction2,file,row.names=FALSE)
+   }
+ )
+ 
+ #mjp added
+ output$savePredictionMap2 <- downloadHandler(
+   filename = function(){paste("linear_regression_model_prediction_map_",Sys.Date(),".png",sep="")},
+   content = function(file){
+     ggsave(file,plot=to_download$LR_map2,dpi=300,width=12,height=10)
+   }
+ )
+ 
+ #####################################  added to display LR prediction map in bicolor ######################
+ 
+ # Default 
+ observeEvent(input$showLRModelPredictionMapTwoColors, {
+   
+   output$ShowRegressionModelPredictionMapBiColor <- renderUI({
+     withSpinner(plotOutput("regression_prediction_map_bicolor",width="800px",height="600px"),type=2)
+   })
+   
+   load("./Data/all_HU8_shapes.RData")
+   
+   if (input$select_LR_end_points=="LogTP" | input$select_LR_end_points=="TP"){
+     myjoinedPred = merge(joined_HU8,to_download$LR_prediction,by="huc8",duplicateGeoms=TRUE)
+     #myjoinedPred_to_map <- sp.na.omit(myjoinedPred,col.name="TP",margin=1) #YD commented this line out
+     myjoinedPred_to_map <- st_as_sf(myjoinedPred)
+     ##YD added
+     myjoinedPred_to_map <- myjoinedPred_to_map[!is.na(myjoinedPred_to_map$TP),]
+     #save(myjoinedPred_to_map,file="./test_prediction_map.RData")
+     name_in_plot_title = "TP"
+     above_cutoff <- myjoinedPred_to_map[myjoinedPred_to_map$TP >= isolate(input$LR_cutoff_value),]
+     below_cutoff <- myjoinedPred_to_map[myjoinedPred_to_map$TP < isolate(input$LR_cutoff_value),]
+   }else if (input$select_LR_end_points=="LogTN" | input$select_LR_end_points=="TN"){
+     myjoinedPred = merge(joined_HU8,to_download$LR_prediction,by="huc8",duplicateGeoms=TRUE)
+     #myjoinedPred_to_map <- sp.na.omit(myjoinedPred,col.name="TN",margin=1) #YD commented this line out
+     myjoinedPred_to_map <- st_as_sf(myjoinedPred)
+     myjoinedPred_to_map <- myjoinedPred_to_map[!is.na(myjoinedPred_to_map$TN),]
+     name_in_plot_title = "TN"
+     above_cutoff <- myjoinedPred_to_map[myjoinedPred_to_map$TN >= isolate(input$LR_cutoff_value),]
+     below_cutoff <- myjoinedPred_to_map[myjoinedPred_to_map$TN < isolate(input$LR_cutoff_value),]
+   }
+   
+   rm(joined_HU8,myjoinedPred)
+   
+   output$regression_prediction_map_bicolor <- renderPlot ({
+     
+     print("inside rendering the regression prediction HUC8 bicolor map now...")
+     
+     to_download$LR_bicolor_map <- ggplot()+
+       ggtitle(paste0(name_in_plot_title," prediction in HUC8"))+
+       geom_sf(data=NE,color="black",fill=NA,size=0.3)+
+       geom_sf(below_cutoff,mapping=aes(fill=paste0("< ",isolate(input$LR_cutoff_value)," \u03bcg/L")),color="grey",alpha=0.8,size=0.05)+
+       geom_sf(above_cutoff,mapping=aes(fill=paste0(">= ",isolate(input$LR_cutoff_value)," \u03bcg/L")),color="grey",alpha=0.8,size=0.05)+
+       theme(panel.background = element_blank())+ # remove grey background
+       labs(fill=name_in_plot_title)+
+       scale_fill_manual(values=c("blue","red"))+
+       theme(plot.title=element_text(hjust=0.5,size=14))+ # put the title at center
+       theme(legend.title=element_text(size=14))+
+       theme(legend.text=element_text(size=14))+
+       theme(axis.text = element_blank())+ # remove axis text
+       theme(axis.ticks = element_blank()) # remove axis text
+     print(to_download$LR_bicolor_map)
+   })
+   
+ }) # observeEvent end
+ 
+ output$saveLRPredictionMapTwoColors <- downloadHandler(
+   filename = function(){paste("regression_model_prediction_map_in_bicolor_",Sys.Date(),".png",sep="")},
+   content = function(file){
+     ggsave(file,plot=to_download$LR_bicolor_map,dpi=300,width=12,height=10)
+   }
+ )
+ 
+ #-----------------------------------------------------------------------------------------
+ # MJP New User Map
+ observeEvent(input$showLRModelPredictionMapTwoColors2, {
+   
+   output$ShowRegressionModelPredictionMapBiColor2 <- renderUI({
+     withSpinner(plotOutput("regression_prediction_map_bicolor2",width="800px",height="600px"),type=2)
+   })
+   
+   load("./Data/all_HU8_shapes.RData")
+   
+   if (input$select_LR_end_points=="LogTP" | input$select_LR_end_points=="TP"){
+     testlr = to_download$LR_prediction2
+     #save(testlr,file="./testlr_check.RData")
+     myjoinedPred = merge(joined_HU8,to_download$LR_prediction2,by="huc8",duplicateGeoms=TRUE)
+     #myjoinedPred_to_map <- sp.na.omit(myjoinedPred,col.name="TP",margin=1) #YD commented this line out
+     myjoinedPred_to_map <- st_as_sf(myjoinedPred)
+     myjoinedPred_to_map <- myjoinedPred_to_map[!is.na(myjoinedPred_to_map$TP),]
+     #save(myjoinedPred_to_map,file="./test_prediction_map.RData")
+     name_in_plot_title = "TP"
+     above_cutoff <- myjoinedPred_to_map[myjoinedPred_to_map$TP >= isolate(input$LR_cutoff_value),]
+     below_cutoff <- myjoinedPred_to_map[myjoinedPred_to_map$TP < isolate(input$LR_cutoff_value),]
+   }else if (input$select_LR_end_points=="LogTN" | input$select_LR_end_points=="TN"){
+     myjoinedPred = merge(joined_HU8,to_download$LR_prediction2,by="huc8",duplicateGeoms=TRUE)
+     #myjoinedPred_to_map <- sp.na.omit(myjoinedPred,col.name="TN",margin=1) #YD commented this line out
+     myjoinedPred_to_map <- st_as_sf(myjoinedPred)
+     myjoinedPred_to_map <- myjoinedPred_to_map[!is.na(myjoinedPred_to_map$TN),]
+     name_in_plot_title = "TN"
+     above_cutoff <- myjoinedPred_to_map[myjoinedPred_to_map$TN >= isolate(input$LR_cutoff_value),]
+     below_cutoff <- myjoinedPred_to_map[myjoinedPred_to_map$TN < isolate(input$LR_cutoff_value),]
+   }
+   
+   rm(joined_HU8,myjoinedPred)
+   
+   output$regression_prediction_map_bicolor2 <- renderPlot ({
+     
+     print("inside rendering the regression prediction HUC8 bicolor map now...")
+     
+     to_download$LR_bicolor_map2 <- ggplot()+
+       ggtitle(paste0(name_in_plot_title," prediction in HUC8"))+
+       geom_sf(data=NE,color="black",fill=NA,size=0.3)+
+       geom_sf(below_cutoff,mapping=aes(fill=paste0("< ",isolate(input$LR_cutoff_value)," \u03bcg/L")),color="grey",alpha=0.8,size=0.05)+
+       geom_sf(above_cutoff,mapping=aes(fill=paste0(">= ",isolate(input$LR_cutoff_value)," \u03bcg/L")),color="grey",alpha=0.8,size=0.05)+
+       theme(panel.background = element_blank())+ # remove grey background
+       labs(fill=name_in_plot_title)+
+       scale_fill_manual(values=c("blue","red"))+
+       theme(plot.title=element_text(hjust=0.5,size=14))+ # put the title at center
+       theme(legend.title=element_text(size=14))+
+       theme(legend.text=element_text(size=14))+
+       theme(axis.text = element_blank())+ # remove axis text
+       theme(axis.ticks = element_blank()) # remove axis text
+     print(to_download$LR_bicolor_map2)
+   })
+   
+ }) # observeEvent end
+ 
+ output$saveLRPredictionMapTwoColors2 <- downloadHandler(
+   filename = function(){paste("regression_model_prediction_map_in_bicolor_",Sys.Date(),".png",sep="")},
+   content = function(file){
+     ggsave(file,plot=to_download$LR_bicolor_map2,dpi=300,width=12,height=10)
+   }
+ )
+ 
+ #####################################  model 2:  run random forest model  #######################################
+>>>>>>> 91887b4ccbdaa5b1841c7898cf124747ba10ddee
   
   observeEvent(input$ConfirmRunRandomForest, {
     #print(input$ConfirmRunRandomForest)
@@ -4784,6 +5720,7 @@ function(input, output, session) {
   
   #### this part is added to link the variables from multilinear regression model to random forest model  ######
   
+<<<<<<< HEAD
   observeEvent(input$use_LR_variables_button, {
     
     data <- data_to_model$data_subset
@@ -5147,6 +6084,233 @@ function(input, output, session) {
     
     print(input$select_variables_PD)
     
+=======
+   # output$partial_dependence_plot <- renderPlot ({
+   #   
+   #   ## gather the variables already shown (maximum number is 4) in partial dependence plot
+   #   PD_already_shown <- rf_model_output$important_variables[idx_1]
+   #   
+   #   p1 <- autoplot(par.p1, contour = TRUE, 
+   #                  ylab=ylabel, xlab=rf_model_output$important_variables[idx_1])+theme_bw()
+   #   if (idx_2>0){
+   #   p2 <- autoplot(par.p2, contour = TRUE, 
+   #                  ylab=ylabel, xlab=rf_model_output$important_variables[idx_2])+theme_bw()
+   #   PD_already_shown <- c(PD_already_shown,rf_model_output$important_variables[idx_2])
+   #   }else{
+   #   p2 <- ggplot()+theme_void() ## create an empty plot
+   #   }
+   #   if (idx_3>0){
+   #   p3 <- autoplot(par.p3, contour = TRUE, 
+   #                  ylab=ylabel, xlab=rf_model_output$important_variables[idx_3])+theme_bw()
+   #   PD_already_shown <- c(PD_already_shown,rf_model_output$important_variables[idx_3])
+   #   }else{
+   #   p3 <- ggplot()+theme_void() ## create an empty plot
+   #   }
+   #   if (idx_4>0){
+   #   p4 <- autoplot(par.p4, contour = TRUE, 
+   #                  ylab=ylabel, xlab=rf_model_output$important_variables[idx_4])+theme_bw()
+   #   PD_already_shown <- c(PD_already_shown,rf_model_output$important_variables[idx_4])
+   #   }else{
+   #   p4 <- ggplot()+theme_void() ## create an empty plot
+   #   }
+   #   print(PD_already_shown)
+   #   updated_choices <- rf_model_output$important_variables[!(rf_model_output$important_variables %in% PD_already_shown)]
+   #   print(updated_choices)
+   #   updateSelectizeInput(session,"select_variables_PD",choices = updated_choices,selected=NULL)
+   #   # Puts all the plots together
+   #   myPlot <- grid.arrange(p1,p2,p3,p4, nrow=2,ncol=2)
+   #   print(myPlot)
+   # }) #renderPlot end
+ 
+ output$displayMoreButton <- renderUI({
+   actionButton(inputId="displayMore", label="Display partial dependence plot",style="color:blue;background-color:black")
+ })
+ 
+ ## remove this feature (requested in the final round of revision in September 2022)
+ # output$showMapButton <- renderUI({
+ #   actionButton(inputId="showPredictionMap", label="Show Prediction Maps for testing dataset",style="color:blue;background-color:black")
+ # })
+ 
+ output$RF_Break1 <- renderUI({
+   div(
+     h5("The following 2 sliders and toggle button are used for default datasets only",style="color:red;font-style:bold")
+   )
+ })
+ 
+ output$select_prediction_year_slider <- renderUI({
+   sliderInput("predict_year","Prediction year:",min=2002,max=2012,value=2007,step=5,round=0,sep="")
+ })
+ 
+ output$select_prediction_month_slider <- renderUI({
+   sliderInput("predict_month","Prediction month:",min=2,max=12,value=7,step=5,round=0,sep="")
+ })
+ 
+ maxDepth_tooltip_text = paste0("Please select the lake maxDepth level at HUC8 scale, 'Shallow (3.6m)','Average (10.1m)'and 'Deep (24.4m)' represent 10%, 50% and 90% of LAGOS lakes maxDepth respectively.")
+ output$select_prediction_lake_maxDepth_button <- renderUI({
+ tipify(radioButtons("lake_maxDepth",label="Lake maxDepth",choices=c("Shallow","Average","Deep"),selected="Average",inline=FALSE),maxDepth_tooltip_text,
+        placement="right",trigger="hover")
+ })
+ 
+ # MJP added
+ # output$RF_Break2 <- renderUI({
+ #   div(
+ #     h5("!!!Make Sure to Click Correct Button Based on the Dataset Being Used!!!",style="color:red;font-style:bold")
+ #   )
+ # })
+ 
+ # MJP changes
+ output$display_rf_map_button <- renderUI({
+   #div(
+   #h5("---------------------------------------",style="color:red;font-style:bold"),
+   #h5("Make Sure You only click Correct Button Based on the Dataset Being Used",style="color:red;font-style:bold"),
+   #h5("---------------------------------------",style="color:red;font-style:bold"),
+   actionButton(inputId="showModelPredictionMapNew", label="Show prediction map for whole region (if using default dataset only!!!)",style="color:blue;background-color:black")
+   #)
+   })
+ 
+ # MJP added
+ # output$RF_Break3 <- renderUI({
+ #   div(
+ #     h5("Default Map Buttons (!!!Only click if loaded default dataset in first section!!!):",style="color:red;font-style:bold")
+ #   )
+ # })
+ 
+ # Original
+ output$display_download_rf_results_button <- renderUI({
+   downloadButton(outputId="saveRFPredictionResults", label="Download prediction results to csv (Default Dataset)",style="color:blue;background-color:black")
+ })
+ 
+ # Original
+ output$download_rf_map_button <- renderUI({
+   downloadButton(outputId="saveRFPredictionMap", label="Save prediction map (Default Dataset)",style="color:blue;background-color:black")
+ })
+ 
+ output$RF_Break4a <- renderUI({
+   div(id="RF_h5",
+     h5("New Dataset Load Button:",style="color:red;font-style:bold")
+   )
+ })
+ 
+ # MJP changes
+ output$display_rf_load_button <- renderUI({
+   fileInput(inputId="uploaded_rf_newDataset", label="Load new dataset (if have new variables)", multiple=FALSE,accept=c("text/csv",".csv",".RData"))
+ })
+ 
+ 
+ output$RF_Break4 <- renderUI({
+   div(
+     h5("New Dataset Map Buttons (!!!Only click if uploaded new dataset!!!):",style="color:red;font-style:bold")
+   )
+ })
+ 
+ # MJP changes
+ output$display_rf_map_button2 <- renderUI({
+   actionButton(inputId="showModelPredictionMapNew2", label="Show prediction map for whole region (if using new dataset only!!!)",style="color:blue;background-color:black")
+ })
+ 
+ # output$RF_Break5 <- renderUI({
+ #   div(
+ #     h5("These buttons work for either default or new datasets:",style="color:red;font-style:bold")
+ #   )
+ # })
+
+ 
+ #MJP addition
+ output$display_download_rf_results_button2 <- renderUI({
+  downloadButton(outputId="saveRFPredictionResults2", label="Download prediction results to csv (New Dataset)",style="color:blue;background-color:black")
+ })
+ 
+ # MJP Addition
+ output$download_rf_map_button2 <- renderUI({
+   downloadButton(outputId="saveRFPredictionMap2", label="Save prediction map (New Dataset)",style="color:blue;background-color:black")
+ })
+ 
+ 
+ output$adjustRFMapColorLegend <- renderUI({
+   sliderInput("RF_color_legend_range","Adjust map color legend here:",min=0,max=10,value=c(1,6),step=0.5,sep="")
+ })
+ 
+ cutoff_tooltip_text = paste0("The endpoint concentration criteria is used to display the prediction map in two different colors (above or below this criteria) accordingly."," Default is 50.")
+ output$display_userInput_cutoff <- renderUI({
+   tipify(numericInput("cutoff_value",label ="Endpoint concentration criteria",50,min=1,max=300,step=1),cutoff_tooltip_text,placement="right",trigger="hover")
+ })
+ 
+ output$RF_Break6 <- renderUI({
+   div(
+     h5("!!!Only use the following buttons after creating the color map above!!!",style="color:red;font-style:bold")
+   )
+ })
+ 
+ output$RF_Break7 <- renderUI({
+   div(
+     h5("Only use the next two buttons if using default dataset:",style="color:red;font-style:bold")
+   )
+ })
+ output$display_rf_map_in_two_colors_button <- renderUI({
+   #div(
+  #   h5("---------------------------------------------------",style="color:red;font-style:bold"),
+   #  h5("Only use the following buttons after creating the color map above!!!",style="color:red;font-style:bold"),
+   #h5("---------------------------------------------------",style="color:red;font-style:bold"),
+   #h5("Only use the next two buttons if using default dataset",style="color:red;font-style:bold"),
+   actionButton(inputId="showModelPredictionMapTwoColors", label="Show prediction map in bicolor (Default Dataset)",style="color:blue;background-color:black")
+   #)
+   })
+ 
+ output$download_rf_map_in_two_colors_button <- renderUI({
+   downloadButton(outputId="saveRFPredictionMapTwoColors", label="Save prediction map in bicolor (Default Dataset)",style="color:blue;background-color:black")
+ })
+ 
+ output$RF_Break8 <- renderUI({
+   div(
+     h5("Only use the next two buttons if uploaded new dataset above:",style="color:red;font-style:bold")
+   )
+ })
+ 
+ # MJP added
+ output$display_rf_map_in_two_colors_button2 <- renderUI({
+   actionButton(inputId="showModelPredictionMapTwoColors2", label="Show prediction map in bicolor (New User Dataset)",style="color:blue;background-color:black")
+   })
+ 
+ # MJP added
+ output$download_rf_map_in_two_colors_button2 <- renderUI({
+   downloadButton(outputId="saveRFPredictionMapTwoColors2", label="Save prediction map in bicolor (New User Dataset)",style="color:blue;background-color:black")
+ })
+ ##YD added
+ print(paste0("inside seeMore now, check logic:",is.null(input$uploaded_dataset)))
+ 
+ if (!is.null(input$uploaded_dataset)){
+   delay(1000,shinyjs::hide("predict_year"))
+   delay(1000,shinyjs::hide("predict_month"))
+   delay(1000,shinyjs::hide("lake_maxDepth"))
+   delay(1200,shinyjs::hide("showModelPredictionMapNew"))
+   delay(1200,shinyjs::hide("saveRFPredictionResults"))
+   delay(1200,shinyjs::hide("saveRFPredictionMap"))
+   delay(1500,shinyjs::hide("showModelPredictionMapTwoColors"))
+   delay(1500,shinyjs::hide("saveRFPredictionMapTwoColors"))
+ }else{
+   delay(1000,shinyjs::hide("RF_h5"))
+   delay(1000,shinyjs::hide("uploaded_rf_newDataset"))
+   delay(1200,shinyjs::hide("showModelPredictionMapNew2"))
+   delay(1200,shinyjs::hide("saveRFPredictionResults2"))
+   delay(1200,shinyjs::hide("saveRFPredictionMap2"))
+   delay(1500,shinyjs::hide("showModelPredictionMapTwoColors2"))
+   delay(1500,shinyjs::hide("saveRFPredictionMapTwoColors2"))
+ }
+ 
+ }) #seeMore observeEvent end
+  
+  
+ observeEvent(input$displayMore, {
+   
+   output$display_more_partial_dependence_plot <- renderUI({
+     withSpinner(plotOutput("more_partial_dependence_plot",width="600px",height="500px"),type=2)
+   })
+   
+   shinyjs::show("more_partial_dependence_plot")
+   
+   print(input$select_variables_PD)
+   
+>>>>>>> 91887b4ccbdaa5b1841c7898cf124747ba10ddee
     if (length(input$select_variables_PD)>0){
       output$more_partial_dependence_plot <- renderPlot ({
         input$displayMore
@@ -5173,6 +6337,476 @@ function(input, output, session) {
   ############### R code for display random forest prediction map for the testing dataset start #########################
   
   ## removed this feature (requested in the final round of revision in September-2022)
+<<<<<<< HEAD
+=======
+ 
+ # observeEvent(input$showPredictionMap, {
+ #   
+ #             output$display_rf_testing_prediction_map <- renderUI({
+ #                                                 withSpinner(leafletOutput("rf_testing_prediction_map",width="500px",height="400px"),type=2)
+ #                                                 })
+ #             output$display_rf_testing_observation_map <- renderUI({
+ #               withSpinner(leafletOutput("rf_testing_observation_map",width="500px",height="400px"),type=2)
+ #             })
+ #             
+ #             output$display_rf_testing_difference_map <- renderUI({
+ #               withSpinner(leafletOutput("rf_testing_difference_map",width="500px",height="400px"),type=2)
+ #             })
+ #      
+ #      load("./Data/all_HU8_shapes.RData")
+ #      print(nrow(rf_model_input$testing_dataset))
+ #      obs1 = subset(rf_model_input$testing_dataset, select = input$select_RF_end_points)
+ #      new_dataset = rf_model_input$testing_dataset[,!(names(rf_model_input$testing_dataset) %in% c(input$select_RF_end_points))] 
+ #      
+ #     # save(new_dataset,file="./Random_Forest_testing_dataset.RData")
+ #      pred_testing = predict(rf_model_output$rfr_ranger, data = new_dataset)
+ #      pred1 = as.data.frame(pred_testing$predictions)
+ #      prediction_name = paste0(input$select_RF_end_points,".Predictions")
+ #      names(pred1)[1]= prediction_name
+ #      pred1$LAGOS_Lake_ID = new_dataset$LAGOS_Lake_ID
+ #      # find the corresponding HU8 code for each Lake ID
+ #      HUC8_data = rf_model_input$Lake_ID_with_HUC8
+ #      print(colnames(HUC8_data))
+ #      HU8_idx = match(pred1$LAGOS_Lake_ID,HUC8_data$LAGOS_Lake_ID)
+ #      print(length(HU8_idx))
+ #      pred1$HU8 = HUC8_data$HU8[HU8_idx]
+ #      obs1$HU8 = HUC8_data$HU8[HU8_idx]
+ #      
+ #     # save(pred1,file="./Random_Forest_pred1.RData")
+ #      
+ #      #Mean concentration by HUC8
+ #      pred2 = aggregate(pred1[,1],list(pred1$HU8),mean)
+ #      obs2 = aggregate(obs1[,1],list(obs1$HU8),mean)
+ #      names(pred2)[1]= "HU8"
+ #      names(obs2)[1]="HU8"
+ #      # Put leading zeros back on TP dataset
+ #      pred2$huc8 = formatC(as.numeric(as.character(pred2$HU8)), width = 8, format = "d",flag = "0") # add zero in front of any
+ #      obs2$huc8 = pred2$huc8
+ #      print(length(pred2))
+ #      myjoinedPred = merge(joined_HU8,pred2,by="huc8",duplicateGeoms=TRUE)
+ #      myjoinedObs = merge(joined_HU8,obs2,by="huc8",duplicateGeoms=TRUE)
+ #      rm(joined_HU8)
+ #      print(length(myjoinedPred))
+ #      #save(myjoinedPred,file="./joinedPred.RData")
+ #      ## remove those polygons with NA predictions
+ #      myjoinedPred_to_map <- sp.na.omit(myjoinedPred,col.name="x",margin=1)
+ #      myjoinedObs_to_map <- sp.na.omit(myjoinedObs,col.name="x",margin=1)
+ #      print(length(myjoinedPred_to_map))
+ #      myjoinedDiff_to_map <- myjoinedObs_to_map
+ #      myjoinedDiff_to_map$x <-myjoinedPred_to_map$x - myjoinedObs_to_map$x
+ #      color_HUC8 = colorNumeric(palette=input$select_color,domain=myjoinedPred_to_map$x)
+ #      color_HUC8_obs = colorNumeric(palette=input$select_color,domain=myjoinedObs_to_map$x)
+ #      color_HUC8_diff = colorNumeric(palette="RdBu",domain=myjoinedDiff_to_map$x)
+ #      #print(color_HUC8)
+ #      
+ #      tag.map.title <- tags$style(HTML("
+ #                       .leaflet-control.map-title { 
+ #                        transform: translate(-50%,20%);
+ #                        position: fixed !important;
+ #                        left: 50%;
+ #                        text-align: center;
+ #                        padding-left: 10px; 
+ #                        padding-right: 10px; 
+ #                        background: rgba(255,255,255,0.75);
+ #                        font-weight: bold;
+ #                        font-size: 28px;
+ #                         }
+ #                         "))
+ #      
+ #      #title_obs <- tags$div(tag.map.title, HTML("Observed"))  
+ #      
+ #      #title_pred <- tags$div(tag.map.title, HTML("Predicted"))  
+ #      
+ #      #title_diff <- tags$div(tag.map.title, HTML("Differences (Predicted-Observed)"))
+ #      
+ #        output$pred_title <- renderText({
+ #          HTML("Predicted")
+ #        })
+ #      
+ #        output$rf_testing_prediction_map <- renderLeaflet ({
+ #        print("inside display random forest prediction map now")
+ #       myMap <- leaflet() %>% addTiles() %>% addResetMapButton() %>%
+ #                setView(lng=-78.8,lat=43,zoom=5) %>%
+ #                addPolygons(data=myjoinedPred_to_map,
+ #                     fillColor = ~color_HUC8(x),  
+ #                     color="red",
+ #                     smoothFactor = 0.5,
+ #                     fillOpacity = 1,
+ #                     weight=1,
+ #                     popup=~huc8
+ #                ) %>% # addPolygons end
+ #                addLegend(pal=color_HUC8,values=myjoinedPred_to_map$x,position='bottomright',title=input$select_RF_end_points,opacity=1)
+ #                #addControl(title_pred,position = "center")
+ #        
+ #      }) # renderLeaflet end
+ #      
+ #        output$obs_title <- renderText({
+ #          HTML("Observed")
+ #        })
+ #      
+ #      output$rf_testing_observation_map <- renderLeaflet ({
+ #        print("inside display random forest observation map now")
+ #        myMap <- leaflet() %>% addTiles() %>% addResetMapButton() %>%
+ #                 setView(lng=-78.8,lat=43,zoom=5) %>%
+ #          addPolygons(data=myjoinedObs_to_map,
+ #                      fillColor = ~color_HUC8(x),  
+ #                      color="red",
+ #                      smoothFactor = 0.5,
+ #                      fillOpacity = 1,
+ #                      weight=1,
+ #                      popup=~huc8
+ #          ) %>% # addPolygons end
+ #          addLegend(pal=color_HUC8,values=myjoinedPred_to_map$x,position='bottomright',title=input$select_RF_end_points,opacity=1) 
+ #          #addControl(title_obs,position = "center")
+ #        
+ #      }) # renderLeaflet end
+ #      
+ #      output$diff_title <- renderText({
+ #        HTML("Differences (Predicted-Observed)")
+ #      })
+ #      
+ #      output$rf_testing_difference_map <- renderLeaflet ({
+ #        print("inside display random forest difference map now")
+ #        myMap <- leaflet() %>% addTiles() %>% addResetMapButton() %>%
+ #                 setView(lng=-78.8,lat=43,zoom=5) %>%
+ #          addPolygons(data=myjoinedDiff_to_map,
+ #                      fillColor = ~color_HUC8_diff(x),  
+ #                      color="red",
+ #                      smoothFactor = 0.5,
+ #                      fillOpacity = 1,
+ #                      weight=1,
+ #                      popup=~huc8
+ #          ) %>% # addPolygons end
+ #          addLegend(pal=color_HUC8_diff,values=myjoinedDiff_to_map$x,position='bottomright',title=input$select_RF_end_points,opacity=1) 
+ #          #addControl(title_diff,position = "center")
+ #      }) # renderLeaflet end
+ #   
+ # })
+ 
+ ############### R code for display random forest prediction map for the testing dataset end #########################
+ 
+ 
+ ############### R code for display random forest prediction map for the uploaded new dataset start ##################
+ 
+ 
+ # Make Default RF Prediction Map - observeEvent1
+ observeEvent(input$showModelPredictionMapNew, {
+   
+   output$ShowRFModelPredictionMapNew <- renderUI({
+     withSpinner(plotOutput("rf_prediction_map_new",width="800px",height="600px"),type=2)
+   })
+   load("./Data/all_HU8_shapes.RData")
+   my_fileName <- paste("./Data/HUC8",isolate(input$predict_year),isolate(input$predict_month),isolate(input$lake_maxDepth),"MaxDepth.RData",sep="_")
+   print(my_fileName)
+   if (file.exists(my_fileName)){
+     load(my_fileName)
+     confirm_message = paste0("a new dataset: ",my_fileName," is loaded to make predictions.")
+     shinyalert("",confirm_message,closeOnClickOutside = TRUE,closeOnEsc = TRUE,
+                confirmButtonText="OK",inputId = "confirm1")  
+   }else{
+     no_file_message = paste0("new dataset: ",my_fileName," does not exist in the data folder.")
+     shinyalert("Alert",no_file_message,closeOnClickOutside = TRUE,closeOnEsc = TRUE,
+                confirmButtonText="OK",inputId = "noFile1")  
+   }
+   
+   HUC8_newData = na.roughfix(HUC8_newData)
+   pred_new = predict(rf_model_output$rfr_ranger, data = HUC8_newData)
+   pred2 = as.data.frame(pred_new$predictions)
+   names(pred2)[1]="predicted"
+   #save(pred2,file="./test_RF_pred2.RData")
+   ## convert LogTP and LogTN into TP and TN
+   if (input$select_RF_end_points=="LogTP" | input$select_RF_end_points=="LogTN"){
+     pred2$converted=exp(pred2$predicted)
+     names(pred2)[2]="HU8"
+   }else{
+     names(pred2)[1]="HU8"
+   }
+   
+   pred2$huc8 = formatC(as.numeric(as.character(HUC8_newData$HUC8)), width = 8, format = "d",flag = "0") # add zero in front of any
+   to_download$RF_prediction = pred2
+   if (input$select_RF_end_points=="LogTP"){
+     names(to_download$RF_prediction)[1:2]=c("LogTP","TP")
+     name_in_plot_title = "TP"
+   }else if (input$select_RF_end_points=="LogTN"){
+     names(to_download$RF_prediction)[1:2]=c("LogTN","TN")
+     name_in_plot_title = "TN"
+   }else{
+     names(to_download$RF_prediction)[1]=input$select_RF_end_points
+     name_in_plot_title = input$select_RF_end_points
+   }
+   #print(length(pred2))
+   myjoinedPred = merge(joined_HU8,pred2,by="huc8",duplicateGeoms=TRUE)
+   save(myjoinedPred,file="./test_myjoinedPred.RData")
+   #myjoinedPred_to_map <- sp.na.omit(myjoinedPred,col.name="HU8",margin=1) #YD commented this line out because Funtion is deprecated
+   myjoinedPred_to_map <- st_as_sf(myjoinedPred)
+   #print(length(myjoinedPred_to_map))
+   max_HU8 = round(1.2*max(na.omit(myjoinedPred_to_map$HU8)))
+   min_HU8 = round(min(na.omit(myjoinedPred_to_map$HU8)))
+   updateSliderInput(session,"RF_color_legend_range",min=0,max=max_HU8,value=c(round(0.8*min_HU8),round(0.8*max_HU8))) 
+   #color_HUC8 = colorNumeric(palette=input$select_color,domain=myjoinedPred_to_map$HU8)
+   
+   #print(color_HUC8)
+   rm(joined_HU8,HUC8_newData,myjoinedPred)
+   ##YD added
+   myjoinedPred_to_map <- myjoinedPred_to_map[!is.na(myjoinedPred_to_map$HU8),]
+   output$rf_prediction_map_new <- renderPlot ({
+     
+     print("inside rendering the random forest prediction HUC8 map now...")
+     
+     to_download$RF_map <- ggplot()+
+       ggtitle(paste0(name_in_plot_title," prediction in HUC8"))+
+       geom_sf(data=NE,color="black",fill=NA,size=0.3)+
+       geom_sf(myjoinedPred_to_map,mapping=aes(fill=HU8),colour="red",alpha=0.7,size=0.05)+
+       scale_fill_gradientn(colors=viridis_pal()(9),name=paste0(name_in_plot_title," (\u03bcg/L)"),limits=c(input$RF_color_legend_range[1],input$RF_color_legend_range[2]))+
+       theme(panel.background = element_blank())+ # remove grey background
+       theme(plot.title=element_text(hjust=0.5,size=14))+ # put the title at center
+       theme(legend.title=element_text(size=14))+
+       theme(legend.text=element_text(size=14))+
+       theme(axis.text = element_blank())+ # remove axis text
+       theme(axis.ticks = element_blank()) # remove axis text
+     print(to_download$RF_map)
+     
+   })
+   
+ }) #observeEvent1 end
+ 
+ 
+ #-------------------------MJP Uncommented out this------------------------------------------
+ # This was originally located directly above observeEvent1
+ uploaded_rf_new_data <- eventReactive(input$uploaded_rf_newDataset,{ # mjp2 should be loaded was load_rf_newDataset
+   newUserData<-import_raw_data(input$uploaded_rf_newDataset$datapath,"csv",has_header=TRUE)
+   
+   #e = new.env()
+   #name <- load(input$loaded_rf_newDataset$datapath,envir = e)
+   #newUserData <- e[[name]]
+   #print(nrow(newData))
+   return(newUserData)
+ })
+ 
+ observe(uploaded_rf_new_data())
+ 
+ observeEvent(input$dataInfo,{
+   shinyjs::runjs("swal.close();")
+ })
+ 
+ # -------------------------------------------------------------------------------------------
+ 
+ 
+ # Make RF Prediction Map with new Variables - observeEvent2
+ observeEvent(input$showModelPredictionMapNew2, {
+   
+   output$ShowRFModelPredictionMapNew2 <- renderUI({
+     withSpinner(plotOutput("rf_prediction_map_new2",width="800px",height="600px"),type=2)
+   })
+   load("./Data/all_HU8_shapes.RData")
+   
+   
+   #download_dir = "C:/Users/mpennino/OneDrive - Environmental Protection Agency (EPA)/Profile/Downloads/"
+   #test = read.csv(paste0(download_dir,"HUC8_2007_7_Average_MaxDepth2.csv"))
+   #test2 = na.omit(test)
+   #test2 = na.roughfix(test)
+   #newUserData = read.csv(paste0(download_dir,"HUC8_2007_7_Average_MaxDepth3.csv"))
+   newUserData <- uploaded_rf_new_data()  
+   
+   # Select out specific variables
+   #selected_variables = c("NLCD_Dummy", "NLCD_pct_forest2","NLCD_pct_farm2")
+   
+   #method 1
+   #selected_variables = selected_variables_for_regression()
+   #HUC8_newUserData = newUserData[,c('HUC8',selected_variables)]
+   
+   # method 2
+   # imprtnce = as.data.frame(importance(rf_model_output$rfr_ranger))
+   # names(imprtnce)[1] = "PercIncMSE"
+   # setDT(imprtnce, keep.rownames = TRUE)[]
+   # imprtnce = imprtnce[,1:2]
+   # names(imprtnce)[1] = "Variable.Name"
+   # HUC8_newUserData = newUserData[,c('HUC8',imprtnce$Variable.Name)]
+   
+   # select for variables in the model
+   #HUC8_newUserData = na.omit(HUC8_newUserData)
+   
+   #HUC8_newUserData = subset(HUC8_newUserData,select=-c())
+   HUC8_newUserData = na.roughfix(newUserData)
+   pred_new = predict(rf_model_output$rfr_ranger, data = HUC8_newUserData)
+   #pred_new = predict(rfr_ranger, data = HUC8_newUserData) # this version of code used for testing (MJP)
+   
+   pred2 = data.frame(predicted = pred_new$predictions)
+   #save(pred2,file="./test_RF_pred2.RData")
+   ## convert LogTP and LogTN into TP and TN, MJP --> I think in this section predicted value is converted to HU8
+   if (input$select_RF_end_points=="LogTP" | input$select_RF_end_points=="LogTN"){
+     pred2$converted=exp(pred2$predicted)
+     names(pred2)[2]="HU8"
+   }else{
+     names(pred2)[1]="HU8"
+   }
+   
+   #names(pred2)[1]="HU8" # use if running this as test
+   
+   pred2$huc8 = formatC(as.numeric(as.character(HUC8_newUserData$HUC8)), width = 8, format = "d",flag = "0") # add zero in front of any
+   to_download$RF_prediction2 = pred2
+   
+   if (input$select_RF_end_points=="LogTP"){
+     names(to_download$RF_prediction2)[1:2]=c("LogTP","TP")
+     name_in_plot_title = "TP"
+   }else if (input$select_RF_end_points=="LogTN"){
+     names(to_download$RF_prediction2)[1:2]=c("LogTN","TN")
+     name_in_plot_title = "TN"
+   }else{
+     names(to_download$RF_prediction2)[1]=input$select_RF_end_points
+     name_in_plot_title = input$select_RF_end_points
+   }
+   
+   #print(length(pred2))
+   myjoinedPred = merge(joined_HU8,pred2,by="huc8",duplicateGeoms=TRUE) # joined_HU8 comes from all_HU8_shapes.RData
+   #myjoinedPred_to_map <- sp.na.omit(myjoinedPred,col.name="HU8",margin=1) # original, YD commented this line out because function deprecated
+   myjoinedPred_to_map <- st_as_sf(myjoinedPred) # original
+   
+   #joined_HU8_ = st_as_sf(joined_HU8) # mjp change
+   #myjoinedPred = merge(joined_HU8_[,c('huc8','areasqkm','geometry')],pred2,by="huc8",duplicateGeoms=TRUE) # mjp version
+   #myjoinedPred_to_map = na.roughfix(myjoinedPred) # mjp version instead of sp.na.omit
+   #myjoinedPred_to_map = myjoinedPred %>% drop_na(HU8) # mjp version
+   
+   #print(length(myjoinedPred_to_map))
+   max_HU8 = round(1.2*max(na.omit(myjoinedPred_to_map$HU8))) # original
+   min_HU8 = round(min(na.omit(myjoinedPred_to_map$HU8)))
+   #max_HU8 = round(1.2*max(myjoinedPred_to_map$predicted)) # mjp
+   ##YD changed
+   updateSliderInput(session,"RF_color_legend_range",min=0,max=max_HU8,value=c(round(0.8*min_HU8),round(0.8*max_HU8))) 
+   #color_HUC8 = colorNumeric(palette=input$select_color,domain=myjoinedPred_to_map$HU8)
+   
+   #print(color_HUC8)
+   rm(joined_HU8,HUC8_newUserData,myjoinedPred)
+   ##YD added
+   myjoinedPred_to_map <- myjoinedPred_to_map[!is.na(myjoinedPred_to_map$HU8),]
+   output$rf_prediction_map_new2 <- renderPlot ({
+     
+     print("inside rendering the random forest prediction HUC8 map now...")
+     
+     to_download$RF_map2 <- ggplot()+
+       ggtitle(paste0(name_in_plot_title," prediction in HUC8"))+
+       geom_sf(data=NE,color="black",fill=NA,size=0.3)+
+       geom_sf(myjoinedPred_to_map,mapping=aes(fill=HU8),colour="red",alpha=0.7,size=0.05)+
+       scale_fill_gradientn(colors=viridis_pal()(9),name=paste0(name_in_plot_title," (\u03bcg/L)"),limits=c(input$RF_color_legend_range[1],input$RF_color_legend_range[2]))+
+       theme(panel.background = element_blank())+ # remove grey background
+       theme(plot.title=element_text(hjust=0.5,size=14))+ # put the title at center
+       theme(legend.title=element_text(size=14))+
+       theme(legend.text=element_text(size=14))+
+       theme(axis.text = element_blank())+ # remove axis text
+       theme(axis.ticks = element_blank()) # remove axis text
+     print(to_download$RF_map2)
+     
+   })
+   
+ }) #observeEvent2 end
+ 
+ # Original
+ output$saveRFPredictionResults <- downloadHandler(
+   filename = function(){paste(input$select_RF_end_points,"_random_forest_model_prediction_results_",Sys.Date(),".csv",sep="")},
+   content = function(file){
+     write.csv(to_download$RF_prediction,file,row.names=FALSE)
+   }
+ )
+ 
+ # MJP added this for the RF map for new user dataset
+ output$saveRFPredictionResults2 <- downloadHandler(
+   filename = function(){paste(input$select_RF_end_points,"_random_forest_model_prediction_results_",Sys.Date(),".csv",sep="")},
+   content = function(file){
+     write.csv(to_download$RF_prediction2,file,row.names=FALSE)
+   }
+ )
+ 
+ # Original
+ output$saveRFPredictionMap <- downloadHandler(
+   filename = function(){paste("random_forest_model_prediction_map_",Sys.Date(),".png",sep="")},
+   content = function(file){
+     ggsave(file,plot=to_download$RF_map,dpi=300,width=12,height=10)
+   }
+   #saveWidget(to_download$LR_map,my_filename,selfcontained=FALSE)
+ )
+ 
+ # MJP added 
+ output$saveRFPredictionMap2 <- downloadHandler(
+   filename = function(){paste("random_forest_model_prediction_map_",Sys.Date(),".png",sep="")},
+   content = function(file){
+     ggsave(file,plot=to_download$RF_map2,dpi=300,width=12,height=10)
+   }
+   #saveWidget(to_download$LR_map,my_filename,selfcontained=FALSE)
+ )
+ 
+ #-----------------------------------------------------------------------------------------
+ ## this part is added to display the prediction map after setting up a concentration (cutoff) criteria
+ 
+ ## FOR DEFAULT DATASET
+ 
+ observeEvent(input$showModelPredictionMapTwoColors, {
+   
+   output$ShowRFModelPredictionMapBiColor <- renderUI({
+     withSpinner(plotOutput("rf_prediction_map_bicolor",width="800px",height="600px"),type=2)
+   })
+   
+   load("./Data/all_HU8_shapes.RData")
+   
+   if (input$select_RF_end_points=="LogTP" | input$select_RF_end_points=="TP"){
+     myjoinedPred = merge(joined_HU8,to_download$RF_prediction,by="huc8",duplicateGeoms=TRUE)
+     #myjoinedPred_to_map <- sp.na.omit(myjoinedPred,col.name="TP",margin=1) # original,YD commented this line out because function deprecated
+     #myjoinedPred_to_map <- sp.na.omit(myjoinedPred,col.name="HU8",margin=1) # mjp version
+     myjoinedPred_to_map <- st_as_sf(myjoinedPred)
+     ##YD added
+     myjoinedPred_to_map <- myjoinedPred_to_map[!is.na(myjoinedPred_to_map$TP),]
+    #save(myjoinedPred_to_map,file="./test_prediction_map.RData")
+     name_in_plot_title = "TP"
+     above_cutoff <- myjoinedPred_to_map[myjoinedPred_to_map$TP >= isolate(input$cutoff_value),]
+     below_cutoff <- myjoinedPred_to_map[myjoinedPred_to_map$TP < isolate(input$cutoff_value),]
+   }else if (input$select_RF_end_points=="LogTN" | input$select_RF_end_points=="TN"){
+     myjoinedPred = merge(joined_HU8,to_download$RF_prediction,by="huc8",duplicateGeoms=TRUE)
+     #myjoinedPred_to_map <- sp.na.omit(myjoinedPred,col.name="TN",margin=1) #YD commented this line out because function deprecated
+     myjoinedPred_to_map <- st_as_sf(myjoinedPred)
+     ##YD added
+     myjoinedPred_to_map <- myjoinedPred_to_map[!is.na(myjoinedPred_to_map$TN),]
+     name_in_plot_title = "TN"
+     above_cutoff <- myjoinedPred_to_map[myjoinedPred_to_map$TN >= isolate(input$cutoff_value),]
+     below_cutoff <- myjoinedPred_to_map[myjoinedPred_to_map$TN < isolate(input$cutoff_value),]
+   }
+   
+   rm(joined_HU8,myjoinedPred)
+   
+   output$rf_prediction_map_bicolor <- renderPlot ({
+     
+     print("inside rendering the random forest prediction HUC8 bicolor map now...")
+     
+     to_download$RF_bicolor_map <- ggplot()+
+       ggtitle(paste0(name_in_plot_title," prediction in HUC8"))+
+       geom_sf(data=NE,color="black",fill=NA,size=0.3)+
+       geom_sf(below_cutoff,mapping=aes(fill=paste0("< ",isolate(input$cutoff_value)," \u03bcg/L")),color="grey",alpha=0.8,size=0.05)+
+       geom_sf(above_cutoff,mapping=aes(fill=paste0(">= ",isolate(input$cutoff_value)," \u03bcg/L")),color="grey",alpha=0.8,size=0.05)+
+       theme(panel.background = element_blank())+ # remove grey background
+       labs(fill=name_in_plot_title)+
+       scale_fill_manual(values=c("blue","red"))+
+       theme(plot.title=element_text(hjust=0.5,size=14))+ # put the title at center
+       theme(legend.title=element_text(size=14))+
+       theme(legend.text=element_text(size=14))+
+       theme(axis.text = element_blank())+ # remove axis text
+       theme(axis.ticks = element_blank()) # remove axis text
+     print(to_download$RF_bicolor_map)
+   })
+   
+ })
+ 
+ 
+ output$saveRFPredictionMapTwoColors <- downloadHandler(
+   filename = function(){paste("random_forest_model_prediction_map_in_bicolor_",Sys.Date(),".png",sep="")},
+   content = function(file){
+     ggsave(file,plot=to_download$RF_bicolor_map,dpi=300,width=12,height=10)
+   }
+ )
+ 
+
+ 
+ observeEvent(input$confirm1,{
+   shinyjs::runjs("swal.close();")
+ }) 
+>>>>>>> 91887b4ccbdaa5b1841c7898cf124747ba10ddee
   
   # observeEvent(input$showPredictionMap, {
   #   
@@ -5319,6 +6953,7 @@ function(input, output, session) {
   
   ############### R code for display random forest prediction map for the testing dataset end #########################
   
+<<<<<<< HEAD
   
   ############### R code for display random forest prediction map for the uploaded new dataset start ##################
   
@@ -5720,6 +7355,70 @@ function(input, output, session) {
   observeEvent(input$noFile1,{
     shinyjs::runjs("swal.close();")
   }) 
+=======
+   if (input$select_RF_end_points=="LogTP" | input$select_RF_end_points=="TP"){
+     myjoinedPred = merge(joined_HU8,to_download$RF_prediction2,by="huc8",duplicateGeoms=TRUE) # original
+     #myjoinedPred_to_map <- sp.na.omit(myjoinedPred,col.name="TP",margin=1) # original,YD commented this line out because function deprecated
+     myjoinedPred_to_map <- st_as_sf(myjoinedPred)
+     #save(myjoinedPred_to_map,file="./test_prediction_map.RData")
+     ##YD added
+     myjoinedPred_to_map <- myjoinedPred_to_map[!is.na(myjoinedPred_to_map$TP),]
+     name_in_plot_title = "TP"
+     above_cutoff <- myjoinedPred_to_map[myjoinedPred_to_map$TP >= isolate(input$cutoff_value),]
+     below_cutoff <- myjoinedPred_to_map[myjoinedPred_to_map$TP < isolate(input$cutoff_value),]
+   }else if (input$select_RF_end_points=="LogTN" | input$select_RF_end_points=="TN"){
+     myjoinedPred = merge(joined_HU8,to_download$RF_prediction2,by="huc8",duplicateGeoms=TRUE)
+     #myjoinedPred_to_map <- sp.na.omit(myjoinedPred,col.name="TN",margin=1) # YD commented this line out
+     myjoinedPred_to_map <- st_as_sf(myjoinedPred)
+     name_in_plot_title = "TN"
+     ##YD added
+     myjoinedPred_to_map <- myjoinedPred_to_map[!is.na(myjoinedPred_to_map$TN),]
+     above_cutoff <- myjoinedPred_to_map[myjoinedPred_to_map$TN >= isolate(input$cutoff_value),]
+     below_cutoff <- myjoinedPred_to_map[myjoinedPred_to_map$TN < isolate(input$cutoff_value),]
+   }
+   
+   rm(joined_HU8,myjoinedPred)
+   
+   output$rf_prediction_map_bicolor2 <- renderPlot ({
+     
+     print("inside rendering the random forest prediction HUC8 bicolor map now...")
+     
+     to_download$RF_bicolor_map2 <- ggplot()+
+       ggtitle(paste0(name_in_plot_title," prediction in HUC8"))+
+       geom_sf(data=NE,color="black",fill=NA,size=0.3)+
+       geom_sf(below_cutoff,mapping=aes(fill=paste0("< ",isolate(input$cutoff_value)," \u03bcg/L")),color="grey",alpha=0.8,size=0.05)+
+       geom_sf(above_cutoff,mapping=aes(fill=paste0(">= ",isolate(input$cutoff_value)," \u03bcg/L")),color="grey",alpha=0.8,size=0.05)+
+       theme(panel.background = element_blank())+ # remove grey background
+       labs(fill=name_in_plot_title)+
+       scale_fill_manual(values=c("blue","red"))+
+       theme(plot.title=element_text(hjust=0.5,size=14))+ # put the title at center
+       theme(legend.title=element_text(size=14))+
+       theme(legend.text=element_text(size=14))+
+       theme(axis.text = element_blank())+ # remove axis text
+       theme(axis.ticks = element_blank()) # remove axis text
+     print(to_download$RF_bicolor_map2)
+   })
+   
+ })
+ 
+ 
+ output$saveRFPredictionMapTwoColors2 <- downloadHandler(
+   filename = function(){paste("random_forest_model_prediction_map_in_bicolor_",Sys.Date(),".png",sep="")},
+   content = function(file){
+     ggsave(file,plot=to_download$RF_bicolor_map2,dpi=300,width=12,height=10)
+   }
+ )
+ 
+ 
+ 
+ observeEvent(input$confirm1,{
+   shinyjs::runjs("swal.close();")
+ }) 
+ 
+ observeEvent(input$noFile1,{
+   shinyjs::runjs("swal.close();")
+ }) 
+>>>>>>> 91887b4ccbdaa5b1841c7898cf124747ba10ddee
   
   ##################################### model 2: random forest model code end #######################################
   

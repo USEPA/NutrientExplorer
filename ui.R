@@ -262,6 +262,7 @@ shinyUI(fluidPage(
                                 
                        ),
                        
+<<<<<<< HEAD
                        tabPanel("Create a Subset",
                                 fluidRow(
                                   column(width = 12,
@@ -342,6 +343,75 @@ shinyUI(fluidPage(
                                 ) #fluidRow close
                                 
                        ),
+=======
+                       sidebarLayout(
+                         sidebarPanel(width=3,
+                                      uiOutput("timeSlider"),
+                                      ## the minimum and maximum values for each slider can be arbitrary, they will be updated as soon as the dataset is loaded 
+                                      sliderInput("year_range","Year Range:",min=1960,max=2030,value=c(2010,2014),step=1,round=0,sep=""),
+                                      sliderInput("month_range","Month Range:",min=1,max=12,value=c(1,12),step=1,round=0),
+                                      sliderInput("iws_ha_range","IWS ha Range(ha):",min=0,max=1482385,value=c(1,1000)),
+                                      #sliderInput("iws_perimkm_range","IWS perimeter Range(km):",min=2,max=3827,value=c(10,1000)),
+                                      sliderInput("elevation_range","Elevation Range(m):",min=0,max=908,value=c(200,500)),
+                                      sliderInput("lake_area_range","Lake Area Range(ha):",min=100,max=10000,value=c(200,500)),
+                                      #sliderInput("lake_perimeter_range","Lake Perimeter Range(m)",min=764,max=1326792,value=c(2000,5000)),
+                                      #sliderInput("lake_meanDepth_range","Lake Mean Depth Range(m)",min=0,max=89,value=c(0,10)),
+                                      sliderInput("lake_maxDepth_range","Lake Maximum Depth Range(m)",min=0,max=199,value=c(0,100)),
+                                      sliderInput("tn_range","Total Nitrogen Range:",min=0,max=20574,value=c(1,1000)),
+                                      sliderInput("LogTN_range","Total LogNitrogen Range:",min=0,max=7,value=c(1,5)),
+                                      sliderInput("tp_range","Total Phosphorus Range:",min=0,max=1220,value=c(1,100)),
+                                      sliderInput("LogTP_range","Total LogPhosphorus Range:",min=0,max=5,value=c(1,3)),
+                                      
+                                      div(style="display: inline-block;vertical-align:top; width: 95%;",selectizeInput("selected_program_name",label="Program name",
+                                                                                              choices=c("A","B","C"),multiple=TRUE,options = list(hideSelected = FALSE,plugins=list('remove_button')))),  
+                                      div(style="display: inline-block;vertical-align:top; width: 95%;",selectizeInput("selected_program_type",label="Program type",
+                                                                                              choices=c("A","B","C"),multiple=TRUE,options = list(hideSelected = FALSE,plugins=list('remove_button')))), 
+                                      div(style="display: inline-block;vertical-align:top; width: 95%;",selectizeInput("selected_HUC2",label="HUC2",
+                                                                                              choices=c("A","B","C"),multiple=TRUE,options = list(hideSelected = FALSE,plugins=list('remove_button')))), 
+                                      actionButton(inputId="saveFile", label="Save my subset",style="color:black;background-color:grey"),
+                                      uiOutput("display_popup_window")
+                                      
+                         ),
+                         mainPanel(width=9,
+                                   fluidRow(
+                                     br(),
+                                     column(width=9,align="center",actionButton(inputId="subsetSpatial", label="Create my subset spatially",style="color:black;background-color:grey"))),
+                                     hr(),
+                                   
+                                   fluidRow(
+                                    column(width=4,align="center",uiOutput("ChooseStateButton")),
+                                    column(width=4,align="center",uiOutput("ChooseHUC2Button")),
+                                    br()
+                                   ),
+                                   conditionalPanel(
+                                     id = "choose_state_panel",
+                                     condition = "input$ChooseState > 0",
+                                   fluidRow(
+                                     br(),
+                                     column(width=8,align="center",uiOutput("display_clickable_map")),
+                                     column(width=3,align="center",verbatimTextOutput("State_list_text_title"),
+                                                                   verbatimTextOutput("State_list_text"),
+                                                                   uiOutput("ClearStateButton")),
+                                                                   
+                                     br()
+                                   ),
+                                   ), # conditionalPanel for state end
+                                   
+                                   conditionalPanel(
+                                     id = "choose_HUC2_panel",
+                                     condition = "input$ChooseHUC2 > 0 ",
+                                     fluidRow(
+                                       column(width=8,align="center",uiOutput("display_clickable_HUC2_map")),
+                                       column(width=3,align="center",verbatimTextOutput("HUC2_list_text_title"),
+                                              verbatimTextOutput("HUC2_list_text"),
+                                              uiOutput("ClearHUC2Button")),
+                                       br()
+                                     ),
+                                   ), # conditionalPanel for state end
+                         ) # mainPanel end
+                         
+                       ) # sidebarLayout end
+>>>>>>> 91887b4ccbdaa5b1841c7898cf124747ba10ddee
                        
                        tabPanel("Explore Subset",
                                 fluidRow(p()),
@@ -497,6 +567,7 @@ shinyUI(fluidPage(
                                                                                     width: 280px;
                                                                                     }
                                                                                     ")),
+<<<<<<< HEAD
                                                           
                                                           br(),
                                                           uiOutput("select_LR_end_points"),
@@ -531,6 +602,42 @@ shinyUI(fluidPage(
                                                           id = "random_forest_panel",
                                                           condition = "input$ChooseModel %% 2 !=0 && input$model_type == Random forest (on data subset)",
                                                           tags$head(tags$style("#run_LR_variables_button{
+=======
+                                            
+                                            br(),
+                                            uiOutput("select_LR_end_points"),
+                                            #uiOutput("userInput_LR_select_group"),
+                                            #uiOutput("display_use_RF_variables_button"),
+                                            br(),
+                                            #uiOutput("userInput_LR_select"),
+                                            #uiOutput("tooltips_space_holder"),
+                                            tags$div(title=paste0("user-defined correlation coefficient criteria.","Default is 0.9."),
+                                                       uiOutput("userInput_correlation_criteria")),
+                                            uiOutput("correlation_analysis"),
+                                            uiOutput("regression_subsets"),
+                                            tags$div(title=paste0("nvmax is the maxinum number of variables used in 'regsubsets' function.","Default is 20."),
+                                                     uiOutput("userInput_LR_nvmax")),
+                                            
+                                            tags$div(title=paste0("nbest is the number of best models to keep in 'regsubsets' function.","Default is 1."),
+                                              uiOutput("userInput_LR_nbest")),
+                                            uiOutput("model_selection"),
+                                            br(),
+                                            tags$div(title=paste0("the number of best models to display for the model selection results.","Default is 5."),
+                                            uiOutput("userInput_nbest_to_display")),
+                                            br(),
+                                            uiOutput("confirm_to_run_LR"),
+                                            br(),
+                                            uiOutput("confirm_to_run_LR_prediction"),
+                                            br(),
+                                            uiOutput("look_back_step_1to3"),
+                                         
+                                       ), # conditionalPanel end
+                                       
+                                       conditionalPanel(
+                                         id = "random_forest_panel",
+                                         condition = "input$ChooseModel %% 2 !=0 && input$model_type == Random forest (on data subset)",
+                                         tags$head(tags$style("#run_LR_variables_button{
+>>>>>>> 91887b4ccbdaa5b1841c7898cf124747ba10ddee
                                                                                     font-size: 12px;
                                                                                     }
                                                                                     ")),
@@ -631,6 +738,7 @@ shinyUI(fluidPage(
                                         white-space: pre-wrap;
                                        }
                                        ")),
+<<<<<<< HEAD
                                                        
                                                        
                                                        id = "regression_model_selection_output_panel",
@@ -900,5 +1008,276 @@ shinyUI(fluidPage(
                        
                      ) # tabsetPanel close
             ) #fluidRow end
+=======
+                                      
+                                      
+                                      id = "regression_model_selection_output_panel",
+                                      condition = "input$ChooseModel %% 2 != 0 && input$model_type == Multilinear regression (on data subset)",
+                                      uiOutput("RegressionModelSelectionOutput1"),
+                                      uiOutput("RegressionModelSelectionOutput2"),
+                                      uiOutput("RegressionModelSelectionOutput3"),
+                                      uiOutput("RegressionModelSelectionOutput4"),
+                                      uiOutput("RegressionModelSelectionOutput5"),
+                                      uiOutput("display_model_selection_footnote_text"),
+                                      
+                                    ), # conditionalPanel end
+                                    
+                                    
+                                    conditionalPanel(
+                                     
+                                      id = "regression_model_final_panel",
+                                      condition = "input$ChooseModel %% 2 != 0 && input$model_type == Multilinear regression (on data subset)",
+                                      fluidRow(br(),
+                                               column(width=6,align="left",uiOutput("RegressionModelFinalPlot")),
+                                               column(width=6,align="right",uiOutput("RegressionModelBetaPlot"))
+                                      ),#fluidRow end
+                                      
+                                      uiOutput("RegressionModelSummaryTable"),
+                                      uiOutput("display_lr_summary_table_footnote"),
+                                      tableOutput("RegressionFinalModelPerformanceTable")
+                                    ), # conditionalPanel end
+                                    
+                                    conditionalPanel(
+                                      id = "regression_model_prediction_panel",
+                                      condition = "input$ChooseModel %% 2 != 0 && input$model_type == Multilinear regression (on data subset)",
+                                     
+                                      # fluidRow(hr(),#mjp added for a break    ## YD commented it out
+                                      #          column(width=12),uiOutput("LR_Break1")
+                                      # ), 
+                                      
+                                      fluidRow(hr(),
+                                      column(width=3,
+                                             uiOutput("select_LR_prediction_year_slider"),
+                                             uiOutput("select_LR_prediction_month_slider"),
+                                             uiOutput("select_LR_prediction_lake_maxDepth_button"),
+                                             br()),
+                                      # column(width=12,uiOutput("LR_Break2"), # MJP Added,YD commented it out
+                                      #        br()),
+                                      # column(width=12,uiOutput("LR_Break3"), #YD commented it out
+                                      #        br()), # MJP added
+                                      column(width=3,
+                                             uiOutput("display_map_button"),
+                                             br(),
+                                             uiOutput("display_download_results_button"),
+                                             br(),
+                                             uiOutput("download_map_button"),
+                                             br()),
+                                      column(width=12,uiOutput("LR_Break4a"),
+                                             br()),
+                                      column(width=3,
+                                             uiOutput("display_lr_load_button"), # MJP added this
+                                             br()),
+                                      # column(width=12,uiOutput("LR_Break4"),
+                                      #        br()),
+                                      #column(width=12,uiOutput("LR_Break5"),
+                                      #       br()),
+                                      column(width=3,
+                                             uiOutput("display_map_button2"),
+                                             br(),
+                                             uiOutput("display_download_results_button2"),
+                                             br(),
+                                             uiOutput("download_map_button2"),
+                                             br()
+                                      ),
+                                      column(width=12,align="center", # changed from 8 to 12
+                                             uiOutput("adjustRegressionMapColorLegend"),
+                                             uiOutput("ShowRegressionModelPredictionMap"),
+                                             uiOutput("ShowRegressionModelPredictionMap2")) # mjp added
+                                      ), #fluidRow end
+                                      # fluidRow(hr(),#mjp added for a break
+                                      #        column(width=12),uiOutput("LR_Break6") # mjp addition
+                                      #        ),
+                                      fluidRow(hr(),
+                                      column(width=3,
+                                             br(),
+                                             uiOutput("display_userInput_LR_cutoff"),
+                                             br()),
+                                      # column(width=12,uiOutput("LR_Break7"), # mjp addition
+                                      #        br()),
+                                      column(width=3,
+                                             uiOutput("display_LR_map_in_two_colors_button"),
+                                             br(),
+                                             uiOutput("download_LR_map_in_two_colors_button"),
+                                             br()),
+                                      # column(width=12,uiOutput("LR_Break8"), # mjp addition
+                                      #        br()),
+                                      column(width=3,
+                                             uiOutput("display_LR_map_in_two_colors_button2"),
+                                             br(),
+                                             uiOutput("download_LR_map_in_two_colors_button2"),
+                                             br(),
+                                             br()),
+                                             column(width=12,align="center", # changed from 8 to 12
+                                                    uiOutput("ShowRegressionModelPredictionMapBiColor"),
+                                                    uiOutput("ShowRegressionModelPredictionMapBiColor2")),
+                                               br(),
+                                               br(),
+                                      ), #fluidRow end
+                                      
+                                    ), # conditionalPanel end
+                                   
+                                    conditionalPanel(
+                                      tags$head(tags$style(HTML('#seeMore {margin-top:420px}')
+                                      )),
+                                      
+                                      id = "random_forest_output_panel",
+                                      condition = "input$ChooseModel %% 2 !=0 && input$model_type == Random forest (on data subset)",
+                                      fluidRow(
+                                        column(width=12,tableOutput("RF_model_output_table")),
+                                        column(width=12,plotOutput("observed_predicted_plot",width="600px",height="300px"))
+                                      ),
+                                      
+                                      fluidRow(br(),
+                                               column(width=6,plotOutput("variable_importance_plot",width="600px",height="500px")),
+                                               br(),
+                                               column(width=4,align="center",uiOutput("seeMoreButton")), # changed center to left
+                                               ), #fluidRow end
+                                      # mjp
+                                      #fluidRow(hr(), column(width=4,align="center",uiOutput("seeMoreButton"))),
+                                      
+                                      fluidRow(hr(), column(width=12,align="left",uiOutput("display_partial_dependence_plot"))),
+                                      fluidRow(br(),
+                                               column(width=4,uiOutput("morePartialDependence"),
+                                                              uiOutput("displayPDSlider"),
+                                                              uiOutput("displayMoreButton"),
+                                                              br(),
+                                                              ),
+                                               column(width=6,align="center",uiOutput("display_more_partial_dependence_plot")),
+                                               
+                                      ), #fluidRow end
+                                      fluidRow(hr(),column(width=12,uiOutput("showMapButton")),
+                                               column(width=4,align="center",textOutput("pred_title",inline=TRUE),
+                                                      uiOutput("display_rf_testing_prediction_map",width="500px",height="400px")),
+                                               column(width=4,align="center",textOutput("obs_title",inline=TRUE),
+                                                      uiOutput("display_rf_testing_observation_map",width="500px",height="400px")),
+                                               column(width=4,align="center",textOutput("diff_title",inline=TRUE),
+                                                      uiOutput("display_rf_testing_difference_map",width="500px",height="400px"))
+                                               ), #fluidRow end
+                                      
+                                      # fluidRow(hr(),#mjp added for a break    ##YD commented it out
+                                      #          column(width=12),uiOutput("RF_Break1")
+                                      #          ), 
+                                      
+                                      fluidRow(hr(),
+                                               column(width=3,uiOutput("select_prediction_year_slider"),
+                                                      uiOutput("select_prediction_month_slider"),
+                                                      uiOutput("select_prediction_lake_maxDepth_button"),
+                                                      br()
+                                               ),
+                                               # column(width=12,uiOutput("RF_Break2"), # MJP Added
+                                               #        br()
+                                               # ),
+                                               # column(width=12,uiOutput("RF_Break3"),
+                                               #        br()), # MJP added
+                                               column(width=3,      
+                                                      uiOutput("display_rf_map_button"),
+                                                      br(),
+                                                      uiOutput("display_download_rf_results_button"),
+                                                      br(),
+                                                      uiOutput("download_rf_map_button"),
+                                                      br(),
+                                                      br(),
+                                                      br()),
+                                               column(width=12,uiOutput("RF_Break4a"),
+                                                       br()),
+                                               column(width=3, 
+                                                      uiOutput("display_rf_load_button"), # MJP added this
+                                                      br()),
+                                               # column(width=12,uiOutput("RF_Break4"),
+                                               #        br()),
+                                               column(width=3, 
+                                                      uiOutput("display_rf_map_button2"), # MJP added this
+                                                      br(),
+                                               # column(width=12,uiOutput("RF_Break5"),
+                                               #        br()),
+                                               #column(width=3, 
+                                                      uiOutput("display_download_rf_results_button2"),
+                                                      br(),
+                                                      uiOutput("download_rf_map_button2"),
+                                                      br()
+                                               ),
+                                      
+                                      # fluidRow(hr(), # original, but split up by MJP
+                                      #         column(width=3,uiOutput("select_prediction_year_slider"),
+                                      #                        uiOutput("select_prediction_month_slider"),
+                                      #                        uiOutput("select_prediction_lake_maxDepth_button"),
+                                      #                        br(),
+                                      #                        uiOutput("display_rf_map_button"),
+                                      #                        br(),
+                                      #                        uiOutput("display_rf_load_button"), # MJP added this
+                                      #                        br(),
+                                      #                        uiOutput("display_rf_map_button2"), # MJP added this
+                                      #                        br(),
+                                      #                        uiOutput("display_download_rf_results_button"),
+                                      #                        br(),
+                                      #                        uiOutput("download_rf_map_button")
+                                      #                ),
+                                              column(width=12,align="center", # mjp changed from 8 to 12
+                                                     uiOutput("adjustRFMapColorLegend"),
+                                                     uiOutput("ShowRFModelPredictionMapNew"),
+                                                     uiOutput("ShowRFModelPredictionMapNew2")),
+                                              br(),
+                                     ), #fluidRow end
+                                     
+                                     fluidRow(hr(),#mjp added for a break
+                                              column(width=12),uiOutput("RF_Break6") # mjp addition
+                                     ), 
+                                     
+                                     fluidRow(hr(),
+                                              
+                                              column(width=3,
+                                                     br(),
+                                                     uiOutput("display_userInput_cutoff")
+                                                     ),
+                                                     #br(),
+                                              # column(width=12,uiOutput("RF_Break7"), # mjp addition, YD commented it out
+                                              #        br()), 
+                                              column(width=3,
+                                                     uiOutput("display_rf_map_in_two_colors_button"),
+                                                     br(),
+                                                     uiOutput("download_rf_map_in_two_colors_button"),
+                                                     br()),
+                                              # column(width=12,uiOutput("RF_Break8"), # mjp addition, YD commented it out
+                                              #        br()), 
+                                              column(width=3,
+                                                     uiOutput("display_rf_map_in_two_colors_button2"), # mjp addition
+                                                     br(),
+                                                     uiOutput("download_rf_map_in_two_colors_button2"), # mjp addition
+                                                     br(),
+                                                     br()
+                                              ),
+                                              column(width=12,align="center", # changed from 8 to 12
+                                                     uiOutput("ShowRFModelPredictionMapBiColor"),
+                                                     uiOutput("ShowRFModelPredictionMapBiColor2")),
+                                              br(),
+                                              br(),
+                                     ), #fluidRow end
+                                      
+                                    ) #conditionalPanel end
+                                    
+                          ) # mainPanel end
+                          
+                        ) # sidebarLayout end
+                        
+                 ) #column close
+                 
+               ) #fluidRow end
+                        
+               
+      ), # tabPanel end
+      
+      tabPanel("User Guide",
+               tags$head(tags$style("#user_guide{font-size:16px;color:black;font-style:bold;display:block; }")),
+               fluidRow(hr(),
+                 column(width=12,align="left",
+                        withSpinner(verbatimTextOutput("user_guide"),type=2)
+                 )# column close
+               ) #fluidRow end
+               
+      ) #tabPanel end
+      
+    ) # tabsetPanel close
+  ) #fluidRow end
+>>>>>>> 91887b4ccbdaa5b1841c7898cf124747ba10ddee
   )
 ))
