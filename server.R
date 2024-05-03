@@ -31,6 +31,7 @@ library("dplyr")
 library("padr")
 library("scales")
 library("DT")
+library("sp") # added on 2024-05-03
 library("geoR")
 library("sf")
 #library("rgeos")
