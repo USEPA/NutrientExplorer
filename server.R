@@ -31,7 +31,7 @@ library("dplyr")
 library("padr")
 library("scales")
 library("DT")
-library("sp") # added on 2024-05-03
+library("sp") # added on 2024-05-03 (need this package for geoR and mapview packages to work)
 library("geoR")
 library("sf")
 #library("rgeos")
