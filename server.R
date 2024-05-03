@@ -282,16 +282,16 @@ function(input, output, session) {
     }
   })
   
-  output$display_button <- renderUI({
-    data <- loaded_data()
-    
-    if (length(data) > 0 ) {
-      # print("After loading LAGOS dataset: ")
-      # print(pryr::mem_used())
-      actionButton(inputId = "displayid",label = "Display file contents",style="color:black;background-color:grey")
-      
-    }
-  })
+  # output$display_button <- renderUI({ # MP changed (commented out) 2024-05-03
+  #   data <- loaded_data()
+  #   
+  #   if (length(data) > 0 ) {
+  #     # print("After loading LAGOS dataset: ")
+  #     # print(pryr::mem_used())
+  #     actionButton(inputId = "displayid",label = "Display file contents",style="color:black;background-color:grey")
+  #     
+  #   }
+  # })
   
   output$download_button <- renderUI({
     data <- loaded_data()
